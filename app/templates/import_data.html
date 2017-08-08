@@ -1,0 +1,68 @@
+{% extends 'basic.html' %}
+{% block title %}数据导入导出{% endblock %}
+{% block content %}
+    <link href="{{  url_for('static',filename='main/css/sweetalert.css') }}" rel="stylesheet" type="text/css" />
+    <script src="{{  url_for('static',filename='main/js/sweetalert.min.js') }}"></script>
+    <aside class="right-side" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+
+ <section class="col-lg-12 connectedSortable ui-sortable">
+
+            <div class="king-page-box">
+        <div class="king-container clearfix">
+            <div class="container-fluid mb0 ">
+                <div class="row">
+                    <div class="col-md-12"></div>
+                    <div class="col-md-12">
+                        <div class="panel panel-success mb0">
+                            <div class="panel-heading"> 数据导入导出 </div>
+                            <div class="panel-body">
+<div class="span9">
+                    <div class="widget-header widget-header-flat">
+                        <h3 class="lighter">
+                           JP-Test --> JP-CBT
+                        </h3>
+                    </div>
+                <h5>请填写需要从<code>&lt;Jp-Test&gt;</code>导入数据到<code>&lt;Jp-cbt&gt;</code>的表名,多个表则以空格隔开.</h5>
+                                   <form id= 'jptest' role="form" action='{{ url_for('main.import_data') }}'  method='POST'>
+                                  <div class="form-group">
+                                        <textarea type="text" name="contenet" class="form-control" rows="4" placeholder="Tablename..." style="margin: 0px 0px 10px; height: 50px; width: 550px; background-color: write;color: black"></textarea>
+                                  </div>
+                                      <button type="submit" class="btn btn-success"> Run </button>
+                            {% for message in get_flashed_messages(with_categories=True) %}
+                                <div class="alert alert-{{ message[0] }}">
+                                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                   <b>{{ message[1] }}</b>
+                                </div>
+                            {% endfor %}
+                            </form>
+
+</div>
+{% if data %}
+    <div class="span4">
+        <div class="row">
+            <div class="col-sm-10">
+                <div class="widget-box transparent">
+                    <div class="widget-header widget-header-flat">
+                        <h4 class="lighter">
+                            执行结果
+                        </h4>
+                    </div>
+<textarea style="margin: 0px 0px 10px; height: 500px; width: 800px; background-color: black;color: green">
+------ Result Start ------
+{{ data }}
+------ Result End   ------
+数据版本已自动升级...
+</textarea>
+{% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </section>
+    </aside>
+{% endblock %}
+

@@ -1,0 +1,73 @@
+{% extends 'basic.html' %}
+{% block title %}uid白名单添加{% endblock %}
+{% block content %}
+    <link href="{{  url_for('static',filename='main/css/sweetalert.css') }}" rel="stylesheet" type="text/css" />
+    <script src="{{  url_for('static',filename='main/js/sweetalert.min.js') }}"></script>
+    <aside class="right-side" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+
+ <section class="col-lg-12 connectedSortable ui-sortable">
+
+            <div class="king-page-box">
+        <div class="king-container clearfix">
+            <div class="container-fluid mb0 ">
+
+                <div class="row">
+                    <div class="col-md-12"></div>
+                    <div class="col-md-12">
+                        <div class="panel panel-success mb0">
+                            <div class="panel-body">
+
+ <div class="col-sm-10">
+                <div class="widget-box transparent">
+                    <div class="widget-header widget-header-flat">
+                        <h4 class="lighter">
+                            当前白名单列表
+                        </h4>
+                    </div>
+<textarea style="margin: 0px 0px 10px; height: 600px; width: 1000px; color: green">
+{{data}}
+</textarea>
+
+                            </div>
+                <div class="span4">
+                                        <div class="span9">
+                    <div class="widget-header widget-header-flat">
+                    </div>
+                 <h5>填入UID(单个添加)</h5>
+                                   <form id= '' role="form" action='{{ url_for('main.addallowuid') }}'  method='POST'>
+                                  <div class="form-group">
+                                  <input type="text" name="addip">
+                                        <!-- <textarea type="text" name="contenet" class="form-control" rows="4" placeholder="Tablename..." style="margin: 0px 0px 10px; height: 50px; width: 550px; background-color: write;color: black"></textarea> -->
+                                  </div>
+                                      <button type="submit" class="btn btn-success" > Run </button>
+                                      <input type="button" onclick="flushpage()" value="刷新" />
+                            {% for message in get_flashed_messages(with_categories=True) %}
+                                <div class="alert alert-{{ message[0] }}">
+                                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                   <b>{{ message[1] }}</b>
+                                </div>
+                            {% endfor %}
+                            </form>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+    </section>
+    </aside>
+
+    <script>
+        function flushpage(){
+            $.ajax ({
+                type:'get',
+                //url:"http://127.0.0.1:5000/addallowuid/",
+                url:"http://cbtops.moefantasy.org:8989/addallowuid/",
+
+
+        })
+      }
+
+    </script>
+
+{% endblock %}

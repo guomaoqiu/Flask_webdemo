@@ -1,0 +1,112 @@
+{% extends 'basic.html' %}
+{% block title %}热更新资源{% endblock %}
+{% block content %}
+    <link href="{{  url_for('static',filename='main/css/sweetalert.css') }}" rel="stylesheet" type="text/css" />
+    <script src="{{  url_for('static',filename='main/js/sweetalert.min.js') }}"></script>
+    <aside class="right-side" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+
+ <section class="col-lg-12 connectedSortable ui-sortable">
+
+            <div class="king-page-box">
+        <div class="king-container clearfix">
+            <div class="container-fluid mb0 ">
+                <div class="row">
+                    <div class="col-md-12"></div>
+                    <div class="col-md-12">
+                        <div class="panel panel-success mb0">
+                            <div class="panel-heading"> 热更新资源 </div>
+                            <div class="panel-body">
+                    <div class="span9">
+                    <div class="widget-header widget-header-flat">
+                   
+                    </div>  
+                 
+                    <h5><code>登录服务器执行脚本</code></h5>
+                    <hr>
+                        <h5>填入<code>&lt;新的ResVersion&gt;</code>到文本框并点击提交，将会自动替换老版本号！请务必保证不能为空提交！</h5>
+                            <form role="form" action='{{ url_for('main.change_resource') }}'  method='POST'>
+                             <!-- <form role="form" action='#'> -->
+                                  <div class="form-group">
+                                        <textarea type="text" name="contenet" class="form-control" rows="4" placeholder="NewResVersion" style="margin: 0px 0px 10px; height: 50px; width: 550px; background-color: write;colo
+r: black"></textarea>
+                                  </div>
+                                      <button type="submit" class="btn btn-primary"> 提交 </button>
+                                       {% for message in get_flashed_messages(with_categories=True) %}
+                                <div class="alert alert-{{ message[0] }}">
+                                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                   <b>{{ message[1] }}</b>
+                                </div>
+                            {% endfor %}
+                            </form>
+                            <hr>
+{% if data %}
+    <div class="span4">
+        <div class="row">
+            <div class="col-sm-10">
+                <div class="widget-box transparent">
+                    <div class="widget-header widget-header-flat">
+                        <h4 class="lighter">
+                            执行结果
+                        </h4>
+                    </div>
+
+<textarea style="margin: 0px 0px 10px; height: 400px; width: 1000px; background-color: black;color: green">
+------ 热更结果如下: ------
+{{ data }}
+------ Result End  ^o^ ------
+</textarea>
+
+                            </div>
+                        </div>
+                    </div>
+{% endif %}
+
+</div>
+
+
+            </div>
+        </div>
+    </div>
+    </section>
+    </aside>
+
+
+<!--     <script>
+        function hot_resource(){
+            swal('test')
+        }
+    </script> -->
+
+
+
+
+    <script>
+        function hot_resource() {
+           // layer.msg('test')
+            $.ajax ({
+                type:'POST',
+                url:"http://127.0.0.1:5000/hot_resorce/",
+                //url:"http://cbtops.jp.warshipgirls.com/hot_resorce/",
+
+                 success: function(res) {
+                     if (res.result) {
+                        swal({
+                          title: "设置时间为成功!",
+                          timer: 2000,
+                          imageUrl: "{{  url_for('static',filename='main/img/thumbs-up.jpg') }}",
+                          showConfirmButton: false
+                        });
+
+                        setTimeout(function() {
+                            window.location.reload();
+                        }, 2000)
+                     }
+                     else{
+                        swal(res.message,'','error')
+                     }
+                    }
+                });
+        }
+    </script>
+{% endblock %}
+
