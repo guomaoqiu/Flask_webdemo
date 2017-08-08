@@ -1,5 +1,5 @@
-<%inherit file="base.html"/>
-<%block name="content">
+{% extends 'base.html' %}
+{% block content %}
     <link href="${STATIC_URL}opsplatform/css/dataTables.bootstrap.css" rel="stylesheet"/>
     <link href="${STATIC_URL}opsplatform/css/bk.css?v=1.0.1" rel="stylesheet">
     <script src="${STATIC_URL}opsplatform/js/jquery-1.10.2.min.js"></script>
@@ -303,4 +303,4 @@
 
 
 
-</%block>
+{% endblock %}
