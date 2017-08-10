@@ -42,40 +42,33 @@
                                                       <input type="checkbox" name="checkall" value="">
                                                    </th>
                                                    <th>Id</th>
-                                                   <th>主机名</th>
-                                                   <th>内网IP</th>
-                                                   <th>外网IP</th>
-                                                   <th>总内存</th>
-                                                   <th>CPU类型</th>
-                                                   <th>CPU颗数</th>
-                                                   <th>系统版本</th>
-                                                   <th>内核版本</th>
-                                                   <th>操作</th>
+                                                   <th>登录IP</th>
+                                                   <th>登录用户</th>
+                                                   <th>登录时间</th>
+
+                                                   <th>登录浏览器</th>
+                                                   <!-- <th>操作</th> -->
                                                 </tr>
                                             </thead>
                                              <tbody>
-                                             % for dd in data:
+                                            {% for dd in data %}
                                                         <tr>
                                                             <td>
                                                                 <input  class="checkbox_id" type="checkbox" name="abc" value="${dd['hostname']}">
                                                             </td>
-                                                            <!-- <td>${dd['id']}</td> -->
-                                                            <td>${loop.index}</td>
-                                                            <td>${dd['hostname']}</td>
-                                                            <td>${dd['private_ip']}</td>
-                                                            <td>${dd['public_ip']}</td>
-                                                            <td>${dd['mem_total']} M</td>
-                                                            <td>${dd['cpu_type']}</td>
-                                                            <td>${dd['num_cpus']}</td>
-                                                            <td>${dd['os_release']}</td>
-                                                            <td>${dd['kernelrelease']}</td>
-                                                            <td>
+                                                            <td>{{ loop.index }}</td>
+                                                            <td>{{ dd.login_ip }}</td>
+                                                            <td>{{ dd.loginuser }}</td>
+                                                            <td>{{ dd.logintime }}</td>
+                                                            <td>{{ dd.login_browser }}</td>
+
+                                                            <!-- <td>
                                                                 <input type="button" class="btn btn-xs btn-info"  check_id="${dd['id']}" name="${dd['hostname']}" value="详情" onclick="get_hostdetail(this)">
                                                                 <input type="button" class="btn btn-xs btn-danger" check_id="${dd['id']}" name="${dd['hostname']}" value="删除" onclick="del_raw(this)">
                                                                 <input type="button" class="btn btn-xs btn-primary" check_id="${dd['id']}" name="${dd['hostname']}" value="命令执行" onclick="salt_cmd(this)">
-                                                            </td>
+                                                            </td> -->
                                                         </tr>
-                                                    % endfor
+                                                    {% endfor %}
                                                 </tbody>
                                                 <tfoot >
                                             <tr>
@@ -265,7 +258,7 @@
       lengthChange: true, //不允许用户改变表格每页显示的记录数
       language: language, //汉化
       columnDefs: [  // 这是第一列不进行排序
-        { "orderable": false, "targets": 0 }
+        { "orderable": false, "targets": 0,1,2,3,4 }
       ]
     } );
   });

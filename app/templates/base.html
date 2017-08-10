@@ -4,10 +4,11 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>BkOps</title>
+    <title>{% block title %}{% endblock %} - OPS</title>
     <link href="{{  url_for('static',filename='opsplatform/css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{  url_for('static',filename='opsplatform/font-awesome/css/font-awesome.css') }}" rel="stylesheet">
     <!-- Toastr style -->
+
     <link href="{{  url_for('static',filename='opsplatform/css/plugins/toastr/toastr.min.css') }}" rel="stylesheet">
 
     <!-- Gritter -->
@@ -89,9 +90,9 @@
                        <li>
                         <a href="{{ url_for('main.index') }}"><i class="fa fa-film"></i> <span class="nav-label">任务历史</span></a>
                     </li>
-                 <!--      <li>
-                        <a href="${SITE_URL}log_audit"><i class="fa fa-film"></i> <span class="nav-label">操作日志</span></a>
-                    </li> -->
+                      <li>
+                        <a href="{{ url_for('main.loginlog') }}"><i class="fa fa-film"></i> <span class="nav-label">登录日志</span></a>
+                    </li>
                 </ul>
             </div>
         </nav>
@@ -106,8 +107,8 @@
                     <span class="m-r-sm text-muted welcome-message">Hello <code>{{ current_user.username }}</code></span>
                 </li>
                 <li>
-                    <a href="{{ url_for('main.index') }}">
-                        <i class="fa fa-sign-out"></i> 返回工作台
+                    <a href="{{ url_for('main.usermanager') }}">
+                        <i class="fa fa-user"></i> 用户管理
                     </a>
                 </li>
                 <li>
@@ -156,6 +157,7 @@
 
     <!-- Sparkline -->
     <script src="{{  url_for('static',filename='opsplatform/js/plugins/sparkline/jquery.sparkline.min.js') }}"></script>
+    <!-- <script src="{{  url_for('static',filename='opsplatform/js/jquery-2.1.1.js') }}"></script> -->
 
     <!-- Sparkline demo data  -->
     <script src="{{  url_for('static',filename='opsplatform/js/demo/sparkline-demo.js') }}"></script>

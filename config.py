@@ -28,8 +28,8 @@ class DevelopmentConfig(Config):
     SQLALCHEMY_TRACK_MODIFICATIONS=False
 
     #google 验证码
-    #RECAPTCHA_PUBLIC_KEY = '1qaz2wsx3edc'
-    #RECAPTCHA_PRIVATE_KEY = '1dfdewdf3dsfdsa'
+    RECAPTCHA_PUBLIC_KEY = '6LesDBYUAAAAADcO0A-3X11Jm41gPKM2BSk-dtWC'
+    RECAPTCHA_PRIVATE_KEY = '6LesDBYUAAAAAIdPUNGhUYFMMZ_oDF3Mo8enwrXH'
 
 
 class TestingConfig(Config):

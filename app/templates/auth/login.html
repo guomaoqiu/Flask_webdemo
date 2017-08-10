@@ -4,7 +4,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta charset="utf-8">
   <!-- Title and other stuffs -->
-  <title>国服CBT Login</title>
+  <title>Login</title>
   <!-- Stylesheets -->
   <link href="{{ url_for('static',filename='auth/style/bootstrap.css') }}" rel="stylesheet">
   <link rel="stylesheet" href="{{ url_for('static',filename='auth/style/font-awesome.css') }}">
@@ -45,7 +45,7 @@
             {% endfor %}
 
                 <div class="widget-foot">
-                  Not Registred? <a href="" >Register here</a>
+                  Not Registred? <a href="{{ url_for('auth.register')}}" >Register here</a>
                 </div>
             </div>
       </div>

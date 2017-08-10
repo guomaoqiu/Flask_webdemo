@@ -31,7 +31,7 @@ class User(UserMixin, db.Model):
 
     def verify_password(self, password):
         return check_password_hash(self.password_hash, password)
-    
+
     def __repr__(self):
         return '<User %r>' % self.username
 
@@ -40,3 +40,21 @@ class User(UserMixin, db.Model):
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
+
+
+class LoginLog(db.Model):
+    __tablename__ = 'login_log'
+    id = db.Column(db.Integer, primary_key=True)
+    loginuser = db.Column(db.String(64))
+    logintime = db.Column(db.String(64))
+    login_browser = db.Column(db.String(200))
+    login_ip = db.Column(db.String(64))
+
+    def to_json(self):
+        return {
+                'id': self.id,
+                'loginuser': self.loginuser,
+                'logintime': self.logintime,
+                'login_browser':self.login_browser,
+                'login_ip': self.login_ip,
+                }
