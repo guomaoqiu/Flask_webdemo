@@ -1,5 +1,6 @@
 # -*- coding:utf-8 -*-
-from flask import render_template,redirect,request,Response,flash
+# jsonify 用于返回jsons数据
+from flask import render_template,redirect,request,Response,flash,jsonify
 from sqlalchemy import desc
 from . import main
 from flask_login import current_user, login_required
@@ -49,14 +50,18 @@ def server_list():
     return render_template('server_list.html')
 
 ###############################################################################
-@main.route('/loginlog')
+@main.route('/loginlog',methods=['GET', 'POST'])
 @login_required
 def loginlog():
     '''
     @note: 返回主页内容
     '''
-    # 以ID 倒序查询
-    res = LoginLog.query.order_by(desc(LoginLog.id)).all()
+    if request.method == 'POST':
+        return "ok"
+        #return redirect('http://www.baidu.com')
+    # 以ID 倒序查询 最近10条
+    res = LoginLog.query.order_by(desc(LoginLog.id)).limit(10)
+    #res = LoginLog.query.order_by(desc(LoginLog.id)).all() # 查询所有
 
     data = []
     for x in res:
@@ -65,3 +70,13 @@ def loginlog():
 
     #user_list = User.query.all()
     return render_template('loginlog.html',data=data)
+
+
+
+@main.route('/test',methods=['GET', 'POST'])
+#@login_required
+def test():
+    if request.method == 'POST':
+        print request.method
+        result = {"result":True}
+        return  jsonify(result)
