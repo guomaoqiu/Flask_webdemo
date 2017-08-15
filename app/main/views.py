@@ -18,19 +18,30 @@ def usermanager():
     '''
     @note: 返回主页内容
     '''
+    #print request.form.get('role')
+    role_id = 1
+    if request.form.get('role') == 'y':
+        #print '管理员'
+        role_id = 0
+
     form = RegistrationForm()
     if form.validate_on_submit():
         user = User(email=form.email.data,
                     username=form.username.data,
                     password=form.password.data,
-                    role_id=form.role_id.data)
+                    role_id=role_id)
         db.session.add(user)
         db.session.commit()
 
-        flash(u'您已注册成功，请登录吧!','success')
-        #flash('you are register successful , please login!','success')
-        #return redirect(url_for('auth.login'))
-    return render_template('user_manager.html',form=form)
+        flash(u'您已注册成功','success')
+
+    # 列出用户
+    res = User.query.all()
+    data = []
+    for x in res:
+        data.append(x.to_json())
+
+    return render_template('user_manager.html',form=form,data=data)
 ###############################################################################
 @main.route('/')
 @login_required
@@ -38,6 +49,7 @@ def index():
     '''
     @note: 返回主页内容
     '''
+    res2 = User.query.filter_by()
     return render_template('index.html')
 
 ###############################################################################
