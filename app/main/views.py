@@ -16,9 +16,8 @@ sys.setdefaultencoding("utf-8")
 @login_required
 def usermanager():
     '''
-    @note: 返回主页内容
+    @note: 用户注册
     '''
-    #print request.form.get('role')
     role_id = 1
     if request.form.get('role') == 'y':
         #print '管理员'
@@ -66,7 +65,7 @@ def server_list():
 @login_required
 def loginlog():
     '''
-    @note: 返回主页内容
+    @note: 查询登录日志
     '''
     if request.method == 'POST':
         return "ok"

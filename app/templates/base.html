@@ -32,7 +32,7 @@
                     <li class="nav-header">
                         <div class="dropdown profile-element">
                           <a href="{{ url_for('main.index') }}"><span>
-                          <img alt="" class="avatar width-full rounded-2" height="105" src="{{  url_for('static',filename='opsplatform/img/p7.jpg') }}" width="150">
+                          <img alt="" class="avatar width-full rounded-2" height="90" src="{{  url_for('static',filename='opsplatform/img/linux.png') }}" width="90">
                              </span>
                             <a data-toggle="dropdown" class="dropdown-toggle">
                               <br>
@@ -74,16 +74,18 @@
                         </ul>
                     </li>
 
-                    <!-- 判断是否是超级用户，如果是才显示该功能 -->
-                     <!-- % if request.user.is_superuser: -->
-                     <li>
-                        <a href="${SITE_URL}api_connect"><i class="fa fa-bullseye"></i> <span class="nav-label">API管理</span></a>
-                    </li>
-                    <!-- % endif -->
+                    <li>
+                       <a href="${SITE_URL}api_connect"><i class="fa fa-bell-o"></i> <span class="nav-label">监控管理</span></span><span class="fa arrow"></span></a>
+                       <ul class="nav nav-second-level collapse">
+                           <li><a href="{{ url_for('main.index') }}">Zabbix Server添加</a></li>
+                           <li><a href="{{ url_for('main.index') }}">Zabbix Server删除</a></li>
+                       </ul>
+                   </li>
+          
+                    <li>
+                       <a href="${SITE_URL}api_connect"><i class="fa fa-bullseye"></i> <span class="nav-label">API管理</span></a>
+                   </li>
 
-                   <!--    <li>
-                        <a href="${SITE_URL}run"><i class="fa fa-paper-plane"></i> <span class="nav-label">定时测试</span></a>
-                    </li> -->
                     <li>
                         <a href="{{ url_for('main.index') }}"><i class="fa fa-tasks"></i> <span class="nav-label">任务中心</span></a>
                     </li>
