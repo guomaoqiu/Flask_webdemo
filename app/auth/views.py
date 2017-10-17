@@ -1,11 +1,42 @@
-# coding: utf-8
+# -*- coding: utf-8 -*-
 from flask import render_template, request, flash, redirect, url_for
 from . import auth
 from .forms import LoginForm, RegistrationForm
 from ..models import User, LoginLog
 from .. import db
-from flask_login import login_user, logout_user, current_user
+from flask_login import login_user, logout_user, login_required, current_user
 import time
+from ..email import send_email
+
+@auth.route('/unconfirmed')
+def unconfirmed():
+    if current_user.is_anonymous or current_user.confirmed:
+        return redirect(url_for('main.index'))
+    return render_template('auth/unconfirmed.html')
+# 发送确认邮件
+@auth.route('/confirm/<token>')
+@login_required
+def confirm(token):
+    if current_user.confirmed:
+        return redirect(url_for('main.index'))
+    if current_user.confirm(token):
+        flash('您已经确认了您的帐户. 谢谢!','info')
+    else:
+        flash('确认链接无效或已过期.','warning')
+    return redirect(url_for('main.index'))
+
+# 从新发送确认邮件
+@auth.route('/confirm')
+@login_required
+def resend_confirmation():
+    token = current_user.generate_confirmation_token()
+    print current_user.email
+    print
+
+    send_email(current_user.email, 'Confirm Your Account',
+               'auth/email/confirm', user=current_user, token=token)
+    flash('通过电子邮件发送了一封新的确认电子邮件.','info')
+    return redirect(url_for('main.index'))
 
 # 用户登录
 @auth.route('/')
@@ -52,6 +83,12 @@ def register():
                     password=form.password.data)
         db.session.add(user)
         db.session.commit()
+
+        token = user.generate_confirmation_token()
+        print token
+        print user.email
+
+        send_email(user.email, '账户确认','auth/email/confirm', user=user, token=token)
 
         flash(u'您已注册成功，请登录吧!','success')
         #flash('you are register successful , please login!','success')

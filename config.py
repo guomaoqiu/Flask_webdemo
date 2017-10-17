@@ -8,6 +8,15 @@ class Config:
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
     SQLALCHEMY_RECORD_QUERIES = True
     BABEL_DEFAULT_LOCALE = 'zh'
+    # send mail
+    MAIL_SERVER = 'smtp.qq.com'
+    MAIL_PORT = 465
+    MAIL_USE_SSL = True
+    MAIL_USERNAME = '2399447849@qq.com' #os.environ.get('MAIL_USERNAME')
+    MAIL_PASSWORD = 'guo.150019' #os.environ.get('MAIL_PASSWORD')
+    FLASKY_MAIL_SUBJECT_PREFIX = u'[花花]'
+    FLASKY_MAIL_SENDER = '2399447849@qq.com'
+    FLASKY_ADMIN = '2399447849@qq.com' # os.environ.get('FANXIANG_ADMIN')    
 
     @staticmethod
     def init_app(app):
@@ -20,7 +29,7 @@ class DevelopmentConfig(Config):
     db_host = '127.0.0.1'
     db_user = 'flask'
     db_pass = 'flask'
-    db_name = 'flask'
+    db_name = 'flask4'
     SQLALCHEMY_DATABASE_URI = 'mysql://' + db_user + ':' + db_pass + '@' + db_host + '/' + db_name
     SQLALCHEMY_ECHO=False #用于显式地禁用或启用查询记录
 
