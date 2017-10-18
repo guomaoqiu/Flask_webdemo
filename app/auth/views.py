@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from flask import render_template, request, flash, redirect, url_for
+from flask import render_template, request, flash, redirect, url_for, current_app
 from . import auth
 from .forms import LoginForm, RegistrationForm, ChangePasswordForm, PasswordResetRequestForm, PasswordResetForm, ChangeEmailForm
 from ..models import User, LoginLog
@@ -77,7 +77,6 @@ def login():
             db.session.add(users) # 提交
             db.session.commit()
 
-
             return redirect(url_for('main.index')) # 如果认证成功则重定向到已认证首页
 
         else:
@@ -90,7 +89,14 @@ def login():
 @auth.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegistrationForm()
+
     if form.validate_on_submit():
+        # 检查config.py中定义的公司邮箱后缀名
+        print 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',current_app.config['COMPANY_MAIL_SUFFIX']
+        if current_app.config['COMPANY_MAIL_SUFFIX'] != str(form.email.data).split('@')[1]:
+            flash('严禁使用非公司邮箱进行注册操作!', 'danger')
+            return render_template('auth/register.html', form=form)
+
         user = User(email=form.email.data,
                     username=form.username.data,
                     password=form.password.data)
@@ -98,13 +104,10 @@ def register():
         db.session.commit()
 
         token = user.generate_confirmation_token()
-        print token
-        print user.email
 
         send_email(user.email, '账户确认','auth/email/confirm', user=user, token=token)
 
         flash('已通过电子邮件向您发送确认电子邮件.','info')
-        #flash('you are register successful , please login!','success')
         return redirect(url_for('auth.login'))
     return render_template('auth/register.html', form=form)
 
@@ -112,7 +115,6 @@ def register():
 @auth.route('/logout')
 def logout():
     logout_user()
-
     return redirect(url_for('auth.login'))
 
 # 更改密码
@@ -159,7 +161,6 @@ def password_reset(token):
         print user
         if user is None:    
             return redirect(url_for('main.index'))
-        print user.reset_password(token, form.password.data)
         if user.reset_password(token, form.password.data):
             flash('您的密码已更新.','success')
             return redirect(url_for('auth.login'))
@@ -185,7 +186,7 @@ def change_email_request():
         else:
             flash('无效的邮箱或密码','danger')
     return render_template("auth/change_email.html", form=form)
-    
+
 @auth.route('/change-email/<token>')
 @login_required
 def change_email(token):

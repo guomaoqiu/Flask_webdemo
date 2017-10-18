@@ -8,6 +8,8 @@ class Config:
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
     SQLALCHEMY_RECORD_QUERIES = True
     BABEL_DEFAULT_LOCALE = 'zh'
+    # 公司邮箱域名后缀，限制只能公司域名才能注册
+    COMPANY_MAIL_SUFFIX='qq.com'
     # send mail
     MAIL_SERVER = 'smtp.qq.com'
     MAIL_PORT = 465
@@ -24,14 +26,14 @@ class Config:
 
 
 class DevelopmentConfig(Config):
-    DEBUG = True
+    DEBUG = False
 
     db_host = '127.0.0.1'
     db_user = 'flask'
     db_pass = 'flask'
     db_name = 'flask4'
     SQLALCHEMY_DATABASE_URI = 'mysql://' + db_user + ':' + db_pass + '@' + db_host + '/' + db_name
-    SQLALCHEMY_ECHO=True #用于显式地禁用或启用查询记录
+    SQLALCHEMY_ECHO=False #用于显式地禁用或启用查询记录
 
     #SQLALCHEMY_DATABASE_URI = 'mysql://flask1:flask1@127.0.0.1/flask1'
     SQLALCHEMY_TRACK_MODIFICATIONS=True
