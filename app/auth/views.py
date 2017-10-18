@@ -166,3 +166,31 @@ def password_reset(token):
         else:
             return redirect(url_for('main.index'))
     return render_template('auth/reset_password.html', form=form)
+
+
+# 更改邮箱
+@auth.route('/change-email', methods=['GET', 'POST'])
+@login_required
+def change_email_request():
+    form = ChangeEmailForm()
+    if form.validate_on_submit():
+        if current_user.verify_password(form.password.data):
+            new_email = form.email.data
+            token = current_user.generate_email_change_token(new_email)
+            send_email(new_email, 'Confirm your email address',
+                       'auth/email/change_email',
+                       user=current_user, token=token)
+            flash('已发送一封包含确认您的新电子邮件地址的说明的电子邮件。','info')
+            return render_template("auth/change_email.html", form=form)
+        else:
+            flash('无效的邮箱或密码','danger')
+    return render_template("auth/change_email.html", form=form)
+    
+@auth.route('/change-email/<token>')
+@login_required
+def change_email(token):
+    if current_user.change_email(token):
+        flash('您的电子邮件地址已更新.','info')
+    else:
+        flash('无效的请求.','warning')
+    return redirect(url_for('main.index'))    
