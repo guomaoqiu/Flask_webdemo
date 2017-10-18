@@ -18,9 +18,7 @@
     <link href="{{  url_for('static',filename='opsplatform/css/style.css') }}" rel="stylesheet">
     <link href="{{  url_for('static',filename='opsplatform/css/bk.css') }}" rel="stylesheet">
 
-    <!-- favicon.ico -->
-    <link href="${STATIC_URL}favicon.ico" type="image/x-icon" rel="icon">
-    <!-- 消息闪现 -->
+
     <link rel="stylesheet" type="text/css" href="{{  url_for('static',filename='opsplatform/css/sweetalert.css') }}">
 </head>
 
@@ -121,7 +119,15 @@
             </ul>
         </nav>
         </div>
-{% block content %}{% endblock %}
+{% for message in get_flashed_messages(with_categories=True) %}
+         <div class="alert alert-{{ message[0] }}">
+             <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <b>{{ message[1] }}</b>
+         </div>
+{% endfor %}
+{% block content %}
+
+{% endblock %}
 
 </div>
 

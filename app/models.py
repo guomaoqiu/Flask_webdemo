@@ -96,7 +96,7 @@ class User(UserMixin, db.Model):
         db.session.add(self)
         return True
 
-    def generate_reset_token(self, expiration=3600):
+    def generate_reset_token(self, expiration=2):
         s = Serializer(current_app.config['SECRET_KEY'], expiration)
         return s.dumps({'reset': self.id})
 

@@ -8,11 +8,23 @@ from flask_login import login_user, logout_user, login_required, current_user
 import time
 from ..email import send_email
 
+
+@auth.before_app_request
+def before_request():
+    if current_user.is_authenticated:
+        current_user.ping()
+   
+        if not current_user.confirmed \
+                and str(request.endpoint[:5]) != 'auth.' \
+                and str(request.endpoint) != 'static':
+            return redirect(url_for('auth.unconfirmed'))
+
 @auth.route('/unconfirmed')
 def unconfirmed():
     if current_user.is_anonymous or current_user.confirmed:
         return redirect(url_for('main.index'))
-    return render_template('auth/unconfirmed.html')
+    return render_template('auth/test.html')
+
 # 发送确认邮件
 @auth.route('/confirm/<token>')
 @login_required
@@ -90,7 +102,7 @@ def register():
 
         send_email(user.email, '账户确认','auth/email/confirm', user=user, token=token)
 
-        flash(u'您已注册成功，请登录吧!','success')
+        flash('已通过电子邮件向您发送确认电子邮件.','info')
         #flash('you are register successful , please login!','success')
         return redirect(url_for('auth.login'))
     return render_template('auth/register.html', form=form)

@@ -11,6 +11,19 @@ from .. import db
 reload(sys)
 sys.setdefaultencoding("utf-8")
 
+###############################################################################
+@main.route('/')
+@login_required
+def index():
+    '''
+    @note: 返回主页内容
+    '''
+    if not current_user.is_authenticated:
+        return redirect('auth/login')
+    else:
+        return render_template('index.html')
+###############################################################################
+
 
 @main.route('/usermanager',methods=['GET', 'POST'])
 @login_required
@@ -42,16 +55,7 @@ def usermanager():
 
     return render_template('user_manager.html',form=form,data=data)
 ###############################################################################
-@main.route('/')
-@login_required
-def index():
-    '''
-    @note: 返回主页内容
-    '''
-    res2 = User.query.filter_by()
-    return render_template('index.html')
 
-###############################################################################
 @main.route('/server_list')
 @login_required
 def server_list():
