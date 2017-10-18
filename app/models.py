@@ -80,7 +80,7 @@ class User(UserMixin, db.Model):
     def verify_password(self, password):
         return check_password_hash(self.password_hash, password)
 
-    def generate_confirmation_token(self, expiration=3600):
+    def generate_confirmation_token(self, expiration=5):
         s = Serializer(current_app.config['SECRET_KEY'], expiration)
         return s.dumps({'confirm': self.id})
 
@@ -102,6 +102,7 @@ class User(UserMixin, db.Model):
 
     def reset_password(self, token, new_password):
         s = Serializer(current_app.config['SECRET_KEY'])
+
         try:
             data = s.loads(token)
         except:
@@ -110,7 +111,7 @@ class User(UserMixin, db.Model):
             return False
         self.password = new_password
         db.session.add(self)
-        return True
+        return data
 
     def generate_email_change_token(self, new_email, expiration=3600):
         s = Serializer(current_app.config['SECRET_KEY'], expiration)

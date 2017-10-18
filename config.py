@@ -3,8 +3,8 @@ import os
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 class Config:
-    SECRET_KEY = os.environ.get('SECRET_KEY') or '1qaz2wsx'
-    SSL_DISABLE = False
+    SECRET_KEY = os.environ.get('SECRET_KEY') or 'hard to guess string'
+    #SSL_DISABLE = False
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
     SQLALCHEMY_RECORD_QUERIES = True
     BABEL_DEFAULT_LOCALE = 'zh'
@@ -31,10 +31,10 @@ class DevelopmentConfig(Config):
     db_pass = 'flask'
     db_name = 'flask4'
     SQLALCHEMY_DATABASE_URI = 'mysql://' + db_user + ':' + db_pass + '@' + db_host + '/' + db_name
-    SQLALCHEMY_ECHO=False #用于显式地禁用或启用查询记录
+    SQLALCHEMY_ECHO=True #用于显式地禁用或启用查询记录
 
     #SQLALCHEMY_DATABASE_URI = 'mysql://flask1:flask1@127.0.0.1/flask1'
-    SQLALCHEMY_TRACK_MODIFICATIONS=False
+    SQLALCHEMY_TRACK_MODIFICATIONS=True
 
     #google 验证码
     RECAPTCHA_PUBLIC_KEY = '6LesDBYUAAAAADcO0A-3X11Jm41gPKM2BSk-dtWC'
