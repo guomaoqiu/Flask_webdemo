@@ -124,7 +124,7 @@ def change_password():
         if current_user.verify_password(form.old_password.data):
             current_user.password = form.password.data
             db.session.add(current_user)
-            flash('您的密码已更新.','success')
+            flash('您的密码已更新.', 'success')
             return redirect(url_for('main.index'))
         else:
             flash('无效的密码.','warning')
@@ -161,7 +161,7 @@ def password_reset(token):
             return redirect(url_for('main.index'))
         print user.reset_password(token, form.password.data)
         if user.reset_password(token, form.password.data):
-            flash('您的密码已更新.')
+            flash('您的密码已更新.','success')
             return redirect(url_for('auth.login'))
         else:
             return redirect(url_for('main.index'))
