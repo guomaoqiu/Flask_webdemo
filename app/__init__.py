@@ -6,6 +6,7 @@ from flask_moment import Moment
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from config import config
+# from models import Role
 
 db = SQLAlchemy()
 bootstrap = Bootstrap()
@@ -26,6 +27,8 @@ def create_app(config_name):
     login_manager.init_app(app)
     with app.test_request_context():
         db.create_all()
+        #Role.insert_roles() # 插入角色数据
+
     from auth import auth as auth_blueprint
     from main import main as main_blueprint
 
