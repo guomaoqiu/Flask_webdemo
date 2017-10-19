@@ -4,21 +4,31 @@
 
 {% block content %}
 <script src="{{  url_for('static',filename='opsplatform/js/jquery-2.1.1.js') }}"></script>
-
-<div class="page-header">
-From <a href="http://maps.google.com/?q={{ user.location }}">{{ user.location }}</a>
-    <h1>{{ user.username }}</h1>
-    {% if user.name or user.location %}
-    <p>
-        {% if user.name %}{{ user.name }}{% endif %}
-        {% if user.location %}
-            From <a href="http://maps.google.com/?q={{ user.location }}">{{ user.location }}</a>
+<!-- <div class="page-header"> -->
+<div class="wrapper wrapper-content animated fadeInRight">
+    <img class="img-rounded profile-thumbnail" src="{{ user.gravatar(size=256) }}">
+    <div class="profile-header">
+        <h1>{{ user.username }}</h1>
+        {% if user.name or user.location %}
+        <p>
+            {% if user.name %}{{ user.name }}<br>{% endif %}
+            {% if user.location %}
+                From <a href="http://maps.google.com/?q={{ user.location }}", target="_blank">{{ user.location }}</a><br>
+            {% endif %}
+        </p>
         {% endif %}
-    </p>
-    {% endif %}
-    {% if current_user.is_administrator() %}
-    <p><a href="mailto:{{ user.email }}">{{ user.email }}</a></p>
-    {% endif %}
-    {% if user.about_me %}<p>{{ user.about_me }}</p>{% endif %}
+        {% if current_user.is_administrator() %}
+        <p><a href="mailto:{{ user.email }}">{{ user.email }}</a></p>
+        {% endif %}
+        {% if user.about_me %}<p>{{ user.about_me }}</p>{% endif %}
+        <p>
+            {% if user == current_user %}
+            <a class="btn btn-default" href="{{ url_for('.edit_profile') }}">Edit Profile</a>
+            {% endif %}
+            {% if current_user.is_administrator() %}
+            <a class="btn btn-danger" href="{{ url_for('.edit_profile_admin', id=user.id) }}">Edit Profile [Admin]</a>
+            {% endif %}
+        </p>
+    </div>
 </div>
-{% endblock %}
+{% endblock %}%

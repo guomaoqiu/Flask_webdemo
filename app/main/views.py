@@ -1,14 +1,16 @@
 # -*- coding:utf-8 -*-
 # jsonify 用于返回jsons数据
-from flask import render_template,redirect,request,Response,flash,jsonify
+from flask import render_template,redirect,request,Response,flash,jsonify,url_for
 from sqlalchemy import desc
 from . import main
 from flask_login import current_user, login_required
 from ..decorators import admin_required , permission_required
 import json,commands,datetime,sys,os
-from .forms import RegistrationForm
+from .forms import RegistrationForm, EditProfileForm, EditProfileAdminForm
 from ..models import User,LoginLog
 from .. import db
+from ..models import Role, User
+
 reload(sys)
 sys.setdefaultencoding("utf-8")
 
@@ -123,3 +125,55 @@ def test():
         return  jsonify(result)
 
 ###############################################################################
+
+
+
+
+@main.route('/edit_profile', methods=['GET', 'POST'])
+@login_required
+def edit_profile():
+    '''
+    @note: 普通用户编辑
+    '''
+    form = EditProfileForm()
+    if form.validate_on_submit():
+        current_user.name = form.name.data
+        current_user.location = form.location.data
+        current_user.about_me = form.about_me.data
+        db.session.add(current_user)
+        flash('Your profile has been updated.','success')
+        return redirect(url_for('.user', username=current_user.username))
+    form.name.data = current_user.name
+    form.location.data = current_user.location
+    form.about_me.data = current_user.about_me
+    return render_template('edit_profile.html', form=form)
+
+
+@main.route('/edit_profile/<int:id>', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def edit_profile_admin(id):
+    '''
+    @note: 管理员编辑
+    '''
+    user = User.query.get_or_404(id)
+    form = EditProfileAdminForm(user=user)
+    if form.validate_on_submit():
+        user.email = form.email.data
+        user.username = form.username.data
+        user.confirmed = form.confirmed.data
+        user.role = Role.query.get(form.role.data)
+        user.name = form.name.data
+        user.location = form.location.data
+        user.about_me = form.about_me.data
+        db.session.add(user)
+        flash('The profile has been updated.','success')
+        return redirect(url_for('.user', username=user.username))
+    form.email.data = user.email
+    form.username.data = user.username
+    form.confirmed.data = user.confirmed
+    form.role.data = user.role_id
+    form.name.data = user.name
+    form.location.data = user.location
+    form.about_me.data = user.about_me
+    return render_template('edit_profile.html', form=form, user=user)

@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}Flasky - Edit Profile{% endblock %}
+
+{% block content %}
+<script src="{{  url_for('static',filename='opsplatform/js/jquery-2.1.1.js') }}"></script>
+<div class="page-header">
+
+    <h1>Edit Your Profile</h1>
+</div>
+<div class="col-md-4">
+    {{ wtf.quick_form(form) }}
+</div>
+{% endblock %}
