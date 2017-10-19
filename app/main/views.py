@@ -12,6 +12,7 @@ reload(sys)
 sys.setdefaultencoding("utf-8")
 
 ###############################################################################
+
 @main.route('/')
 @login_required
 def index():
@@ -22,8 +23,18 @@ def index():
         return redirect('auth/login')
     else:
         return render_template('index.html')
+
 ###############################################################################
 
+@main.route('/user/<username>')
+def user(username):
+    '''
+    @note: 返回用户信息页面
+    '''
+    user = User.query.filter_by(username=username).first_or_404()
+    return render_template('user.html', user=user)
+
+###############################################################################
 
 @main.route('/usermanager',methods=['GET', 'POST'])
 @login_required
@@ -45,7 +56,7 @@ def usermanager():
         db.session.add(user)
         db.session.commit()
 
-        flash(u'您已注册成功','success')
+        flash(u'添加用户成功','success')
 
     # 列出用户
     res = User.query.all()
@@ -54,6 +65,7 @@ def usermanager():
         data.append(x.to_json())
 
     return render_template('user_manager.html',form=form,data=data)
+
 ###############################################################################
 
 @main.route('/server_list')
@@ -65,6 +77,7 @@ def server_list():
     return render_template('server_list.html')
 
 ###############################################################################
+
 @main.route('/loginlog',methods=['GET', 'POST'])
 @login_required
 def loginlog():
@@ -86,7 +99,7 @@ def loginlog():
     #user_list = User.query.all()
     return render_template('loginlog.html',data=data)
 
-
+###############################################################################
 
 @main.route('/test',methods=['GET', 'POST'])
 #@login_required
@@ -95,3 +108,5 @@ def test():
         print request.method
         result = {"result":True}
         return  jsonify(result)
+
+###############################################################################

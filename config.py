@@ -26,7 +26,7 @@ class Config:
 
 
 class DevelopmentConfig(Config):
-    DEBUG = False
+    DEBUG = True
 
     db_host = '127.0.0.1'
     db_user = 'flask'

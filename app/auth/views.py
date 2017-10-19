@@ -8,27 +8,39 @@ from flask_login import login_user, logout_user, login_required, current_user
 import time
 from ..email import send_email
 
+###############################################################################
 
 @auth.before_app_request
 def before_request():
+    '''
+    @note: 修饰的函数会在请求处理之前被调用
+    '''
     if current_user.is_authenticated:
         current_user.ping()
-   
         if not current_user.confirmed \
-                and str(request.endpoint[:5]) != 'auth.' \
-                and str(request.endpoint) != 'static':
+                and str(request.endpoint[:5]) != 'auth.':
+                #and str(request.endpoint) != 'static':
             return redirect(url_for('auth.unconfirmed'))
+
+###############################################################################
 
 @auth.route('/unconfirmed')
 def unconfirmed():
+    '''
+    @note: 发送确认邮件后登陆未确认
+    '''
     if current_user.is_anonymous or current_user.confirmed:
         return redirect(url_for('main.index'))
     return render_template('auth/unconfirmed.html')
 
-# 点击确认邮件链接后
+###############################################################################
+
 @auth.route('/confirm/<token>')
 @login_required
 def confirm(token):
+    '''
+    @note: 点击确认邮件链接后
+    '''
     if current_user.confirmed:
         return redirect(url_for('main.index'))
     if current_user.confirm(token):
@@ -38,10 +50,14 @@ def confirm(token):
         return render_template('auth/unconfirmed.html')
     return redirect(url_for('main.index'))
 
-# 从新发送确认邮件
+###############################################################################
+
 @auth.route('/confirm')
 @login_required
 def resend_confirmation():
+    '''
+    @note: 从新发送确认邮件
+    '''
     token = current_user.generate_confirmation_token()
     print current_user.email
     print
@@ -51,12 +67,12 @@ def resend_confirmation():
     flash('通过电子邮件发送了一封新的确认电子邮件.','info')
     return redirect(url_for('main.index'))
 
-# 用户登录
-# @auth.route('/')
+###############################################################################
+
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
     '''
-    Check user info, email and password !
+    @note: 用户登录
     '''
     form = LoginForm()
     if form.validate_on_submit():
@@ -65,8 +81,6 @@ def login():
 
             login_user(user,form.remember_me.data) # 记住我功能，bool值
 
-            print request.user_agent
-            print request.cookies
             # 记录登陆日志
             users = LoginLog()
             print user.username # 用户
@@ -81,18 +95,18 @@ def login():
 
         else:
             flash(u'邮箱或密码无效,请重新输入!','danger')    # 如果认证错误则flash一条消息过去
-            #flash('email or password error','danger')    # 如果认证错误则flash一条消息过去
     return render_template('auth/login.html',form=form)
-    #return render_template('auth/login.html')
 
-#用户注册
+###############################################################################
+
 @auth.route('/register', methods=['GET', 'POST'])
 def register():
+    '''
+    @note: 用户注册
+    '''
     form = RegistrationForm()
-
     if form.validate_on_submit():
         # 检查config.py中定义的公司邮箱后缀名
-        print 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',current_app.config['COMPANY_MAIL_SUFFIX']
         if current_app.config['COMPANY_MAIL_SUFFIX'] != str(form.email.data).split('@')[1]:
             flash('严禁使用非公司邮箱进行注册操作!', 'danger')
             return render_template('auth/register.html', form=form)
@@ -111,16 +125,24 @@ def register():
         return redirect(url_for('auth.login'))
     return render_template('auth/register.html', form=form)
 
-# 用户登出
+###############################################################################
+
 @auth.route('/logout')
 def logout():
+    '''
+    @note: 用户登出
+    '''
     logout_user()
     return redirect(url_for('auth.login'))
 
-# 更改密码
+###############################################################################
+
 @auth.route('/change-password', methods=['GET', 'POST'])
 @login_required
 def change_password():
+    '''
+    @note: 登录状态更改密码
+    '''
     form = ChangePasswordForm()
     if form.validate_on_submit():
         if current_user.verify_password(form.old_password.data):
@@ -132,8 +154,13 @@ def change_password():
             flash('无效的密码.','warning')
     return render_template("auth/change_password.html", form=form)
 
+###############################################################################
+
 @auth.route('/reset', methods=['GET', 'POST'])
 def password_reset_request():
+    '''
+    @note: 发起重置密码请求
+    '''
     if not current_user.is_anonymous:
         return redirect(url_for('main.index'))
     form = PasswordResetRequestForm()
@@ -150,9 +177,13 @@ def password_reset_request():
         return redirect(url_for('auth.login'))
     return render_template('auth/reset_password.html', form=form)
 
+###############################################################################
 
 @auth.route('/reset/<token>', methods=['GET', 'POST'])
 def password_reset(token):
+    '''
+    @note: 发起重置密码请求后携带token确认
+    '''
     if not current_user.is_anonymous:
         return redirect(url_for('main.index'))
     form = PasswordResetForm()
@@ -168,17 +199,20 @@ def password_reset(token):
             return redirect(url_for('main.index'))
     return render_template('auth/reset_password.html', form=form)
 
+###############################################################################
 
-# 更改邮箱
 @auth.route('/change-email', methods=['GET', 'POST'])
 @login_required
 def change_email_request():
+    '''
+    @note: 更改邮箱
+    '''
     form = ChangeEmailForm()
     if form.validate_on_submit():
         if current_user.verify_password(form.password.data):
             new_email = form.email.data
             token = current_user.generate_email_change_token(new_email)
-            send_email(new_email, 'Confirm your email address',
+            send_email(new_email, '确认您的邮箱地址',
                        'auth/email/change_email',
                        user=current_user, token=token)
             flash('已发送一封包含确认您的新电子邮件地址的说明的电子邮件。','info')
@@ -187,11 +221,18 @@ def change_email_request():
             flash('无效的邮箱或密码','danger')
     return render_template("auth/change_email.html", form=form)
 
+###############################################################################
+
 @auth.route('/change-email/<token>')
 @login_required
 def change_email(token):
+    '''
+    @note: 更改邮箱
+    '''
     if current_user.change_email(token):
         flash('您的电子邮件地址已更新.','info')
     else:
         flash('无效的请求.','warning')
-    return redirect(url_for('main.index'))    
+    return redirect(url_for('main.index'))
+
+###############################################################################
