@@ -4,6 +4,7 @@ from flask import render_template,redirect,request,Response,flash,jsonify
 from sqlalchemy import desc
 from . import main
 from flask_login import current_user, login_required
+from ..decorators import admin_required , permission_required
 import json,commands,datetime,sys,os
 from .forms import RegistrationForm
 from ..models import User,LoginLog
@@ -11,9 +12,19 @@ from .. import db
 reload(sys)
 sys.setdefaultencoding("utf-8")
 
+
+
+
+@main.route('/admin')      
+@login_required
+@admin_required
+def for_admin_only():
+    # 在登陆状态下只允许管理者进入，否则来到403禁止登陆界面
+    return u'管理者进入'
 ###############################################################################
 
 @main.route('/')
+# @admin_required
 @login_required
 def index():
     '''

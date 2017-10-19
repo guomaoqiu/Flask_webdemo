@@ -107,9 +107,9 @@ def register():
     form = RegistrationForm()
     if form.validate_on_submit():
         # 检查config.py中定义的公司邮箱后缀名
-        if current_app.config['COMPANY_MAIL_SUFFIX'] != str(form.email.data).split('@')[1]:
-            flash('严禁使用非公司邮箱进行注册操作!', 'danger')
-            return render_template('auth/register.html', form=form)
+        # if current_app.config['COMPANY_MAIL_SUFFIX'] != str(form.email.data).split('@')[1]:
+        #     flash('严禁使用非公司邮箱进行注册操作!', 'danger')
+        #     return render_template('auth/register.html', form=form)
 
         user = User(email=form.email.data,
                     username=form.username.data,

@@ -106,13 +106,15 @@
         </div>
             <ul class="nav navbar-top-links navbar-right">
                 <li>
-                    <span class="m-r-sm text-muted welcome-message">Hello <code>{{ current_user.username }}</code></span>
+                    <span class="m-r-sm text-muted welcome-message">Hello <code>{{ current_user.username }}------{{ current_user.role }}</code></span>
                 </li>
                 <li>
+                {% if current_user.is_administrator() %} <!-- 通过是否是管理员判断 这个功能或者这个url是否显示(使用) -->
                     <a href="{{ url_for('main.usermanager') }}">
                         <i class="fa fa-user"></i> 用户管理
                     </a>
                 </li>
+                {% endif %}
                 <li>
                     <a href="{{ url_for('auth.logout') }}">
                         <i class="fa fa-sign-out"></i> 登出

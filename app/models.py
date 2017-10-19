@@ -33,7 +33,7 @@ class Role(db.Model):
                           Permission.COMMENT |
                           Permission.WRITE_ARTICLES |
                           Permission.MODERATE_COMMENTS, False),
-            'Administrator': (0xff, False)
+            'Administrator': (0xff , False)
         }
         for r in roles:
             role = Role.query.filter_by(name=r).first()
@@ -67,15 +67,18 @@ class User(UserMixin, db.Model):
         if self.role is None:
             if self.email == current_app.config['FLASKY_ADMIN']:
                 self.role = Role.query.filter_by(permissions=0xff).first()
+                print self.role
             if self.role is None:
+                print self.role
                 self.role = Role.query.filter_by(default=True).first()
 
     @property
     def password(self):
         raise AttributeError('password is not a readable attribute')
 
-    @password.setter #添加密码时对密码加密
+    @password.setter
     def password(self, password):
+        # 添加密码时对密码加密
         self.password_hash = generate_password_hash(password)
 
     def verify_password(self, password):
@@ -141,11 +144,9 @@ class User(UserMixin, db.Model):
     def is_administrator(self):
         return self.can(Permission.ADMINISTER)
 
-    # 记录登录时间
     def ping(self):
-        print self.last_seen
+        # 记录登录时间
         self.last_seen = datetime.now()
-        print 'xxxxxxxxxxxxxxxxx',datetime.now()
         db.session.add(self)
 
     def __repr__(self):
@@ -158,7 +159,6 @@ class User(UserMixin, db.Model):
                 'username': self.username,
                 'role_id':self.role_id,
                 }
-
 
 class AnonymousUser(AnonymousUserMixin):
     def can(self, permissions):
@@ -173,14 +173,6 @@ login_manager.anonymous_user = AnonymousUser
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
-
-
-
-
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(int(user_id))
-
 
 
 class LoginLog(db.Model):
