@@ -59,8 +59,8 @@ class User(UserMixin, db.Model):
     name = db.Column(db.String(64))
     location = db.Column(db.String(64))
     about_me = db.Column(db.Text())
-    member_since = db.Column(db.DateTime(), default=datetime.utcnow)
-    last_seen = db.Column(db.DateTime(), default=datetime.utcnow)
+    member_since = db.Column(db.DateTime(), default=datetime.now)
+    last_seen = db.Column(db.DateTime(), default=datetime.now)
 
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
@@ -141,8 +141,11 @@ class User(UserMixin, db.Model):
     def is_administrator(self):
         return self.can(Permission.ADMINISTER)
 
+    # 记录登录时间
     def ping(self):
-        self.last_seen = datetime.utcnow()
+        print self.last_seen
+        self.last_seen = datetime.now()
+        print 'xxxxxxxxxxxxxxxxx',datetime.now()
         db.session.add(self)
 
     def __repr__(self):
