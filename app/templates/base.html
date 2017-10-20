@@ -18,6 +18,7 @@
     <link href="{{  url_for('static',filename='opsplatform/css/style.css') }}" rel="stylesheet">
     <link href="{{  url_for('static',filename='opsplatform/css/bk.css') }}" rel="stylesheet">
 
+    <link href="{{  url_for('static',filename='main/img/thumbs-up.jpg') }}" type="image/x-icon" rel="icon">
 
     <link rel="stylesheet" type="text/css" href="{{  url_for('static',filename='opsplatform/css/sweetalert.css') }}">
 </head>
@@ -29,7 +30,7 @@
                 <ul class="nav metismenu" id="side-menu">
                     <li class="nav-header">
                         <div class="dropdown profile-element">
-                          <a href="{{ url_for('main.index') }}"><span>
+                          <!-- <a href="{{ url_for('main.index') }}"><span> -->
                           <img class="img-rounded profile-thumbnail" src="{{ current_user.gravatar(size=256) }}" width="90">
                           
                         
@@ -39,7 +40,7 @@
                     </li>
 
                      <li>  <!-- 默认为主页 -->
-                        <a href="{{ url_for('main.server_list') }}"><i class="fa fa-th-large"></i> <span class="nav-label">Dashboards</span></a>
+                        <a href="{{ url_for('main.index') }}"><i class="fa fa-th-large"></i> <span class="nav-label">首页</span></a>
                     </li>
                      <li>
                         <a href=""><i class="fa fa-table"></i> <span class="nav-label">资产管理</span><span class="fa arrow"></span></a>
@@ -96,16 +97,23 @@
             <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " title='收起'><i class="fa fa-bars" ></i> </a>
         </div>
             <ul class="nav navbar-top-links navbar-right">
-                 {% if current_user.is_authenticated %}
+              {% if current_user.is_administrator() %}  
+                 <li><a href="{{ url_for('main.for_admin_only') }}"><i class="fa fa-email"></i>管理页面</a></li>
+              {%endif%} 
+            <li><a><i class="fa fa-email"></i>Hello <code>{{ current_user.username }}</code></a></li>
+             {% if current_user.is_authenticated %}
+
+             <li><a href="{{ url_for('main.user', username=current_user.username) }}">Profile</a></li>
                       <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Account <b class="caret"></b></a>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Account<b class="caret"></b></a>
                             <ul class="dropdown-menu">
-                                <li><a href="{{ url_for('auth.change_password') }}"><i class="fa fa-email"></i>Change Password</a></li>
-                                <li><a href="{{ url_for('auth.change_email_request') }}"><i class="fa fa-email"></i>Change Email</a></li>
+                                <li><a href="{{ url_for('auth.change_password') }}"><i class="fa fa-key"></i> Change Password</a></li>
+                                <li><a href="{{ url_for('auth.change_email_request') }}"><i class="fa fa-envelope"></i> Change Email</a></li>
                                 <li><a href="{{ url_for('auth.logout') }}"><i class="fa fa-sign-out"></i> Log Out</a></li>
                             </ul>
                     </li>
                 {% endif %}
+
         </nav>
         </div>
         {% for message in get_flashed_messages(with_categories=True) %}

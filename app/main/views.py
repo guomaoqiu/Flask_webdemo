@@ -14,8 +14,7 @@ from ..models import Role, User
 reload(sys)
 sys.setdefaultencoding("utf-8")
 
-
-
+###############################################################################
 
 @main.route('/admin')      
 @login_required
@@ -24,7 +23,8 @@ def for_admin_only():
     '''
     @note: 在登陆状态下只允许管理者进入，否则来到403禁止登陆界面
     '''
-    return u'管理者进入'
+    return render_template('admin.html')
+
 ###############################################################################
 
 @main.route('/')
@@ -148,6 +148,7 @@ def edit_profile():
     form.about_me.data = current_user.about_me
     return render_template('edit_profile.html', form=form)
 
+###############################################################################
 
 @main.route('/edit_profile/<int:id>', methods=['GET', 'POST'])
 @login_required
@@ -177,3 +178,5 @@ def edit_profile_admin(id):
     form.location.data = user.location
     form.about_me.data = user.about_me
     return render_template('edit_profile.html', form=form, user=user)
+
+###############################################################################
