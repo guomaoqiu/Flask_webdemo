@@ -35,7 +35,7 @@ class DevelopmentConfig(Config):
     SQLALCHEMY_DATABASE_URI = 'mysql://' + db_user + ':' + db_pass + '@' + db_host + '/' + db_name
     SQLALCHEMY_ECHO=False #用于显式地禁用或启用查询记录
 
-    #SQLALCHEMY_DATABASE_URI = 'mysql://flask1:flask1@127.0.0.1/flask1'
+    ##SQLALCHEMY_DATABASE_URI = 'mysql://flask1:flask1@127.0.0.1/flask1'
     SQLALCHEMY_TRACK_MODIFICATIONS=True
 
     #google 验证码
