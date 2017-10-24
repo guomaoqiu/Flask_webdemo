@@ -10,6 +10,7 @@ from ..models import User
 class LoginForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Length(1, 64),Email()])
     password = PasswordField('Password', validators=[DataRequired()])
+    #code = StringField('code',)
     #recaptcha = RecaptchaField() # google验证码
     remember_me = BooleanField('Keep me logged in')
 

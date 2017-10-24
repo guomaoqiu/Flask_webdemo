@@ -28,10 +28,9 @@ class Role(db.Model):
     def insert_roles():
         '''
         #python manage.py shell
-        >>> from manage import db
-        >>> from manage import Role
-        >>> Role.insert_roles()
-        >>> Role.query.all()
+        from manage import Role
+        Role.insert_roles()
+        Role.query.all()
         [<Role u'Moderator'>, <Role u'Administrator'>, <Role u'User'>]
         '''
         roles = {
@@ -83,7 +82,6 @@ class User(UserMixin, db.Model):
             self.avatar_hash = hashlib.md5(
                 self.email.encode('utf-8')).hexdigest()
 
-
     @property
     def password(self):
         raise AttributeError('password is not a readable attribute')
@@ -101,6 +99,7 @@ class User(UserMixin, db.Model):
         return s.dumps({'confirm': self.id})
 
     def confirm(self, token):
+        # 确认功能
         s = Serializer(current_app.config['SECRET_KEY'])
         try:
             data = s.loads(token)
@@ -113,10 +112,12 @@ class User(UserMixin, db.Model):
         return True
 
     def generate_reset_token(self, expiration=3600):
+        # 重新设置时获取token
         s = Serializer(current_app.config['SECRET_KEY'], expiration)
         return s.dumps({'reset': self.id})
 
     def reset_password(self, token, new_password):
+        # 重置密码
         s = Serializer(current_app.config['SECRET_KEY'])
         try:
             data = s.loads(token)
@@ -129,10 +130,12 @@ class User(UserMixin, db.Model):
         return True
 
     def generate_email_change_token(self, new_email, expiration=3600):
+        # 更改邮箱时获得token
         s = Serializer(current_app.config['SECRET_KEY'], expiration)
         return s.dumps({'change_email': self.id, 'new_email': new_email})
 
     def change_email(self, token):
+        # 更改邮箱
         s = Serializer(current_app.config['SECRET_KEY'])
         try:
             data = s.loads(token)
@@ -154,6 +157,7 @@ class User(UserMixin, db.Model):
             (self.role.permissions & permissions) == permissions
 
     def is_administrator(self):
+        # 判断用户是否是管理员
         return self.can(Permission.ADMINISTER)
 
     def ping(self):
@@ -163,6 +167,7 @@ class User(UserMixin, db.Model):
 
 
     def gravatar(self, size=100, default='identicon', rating='g'):
+        # 用户头像
         if request.is_secure:
             url = 'https://secure.gravatar.com/avatar'
         else:

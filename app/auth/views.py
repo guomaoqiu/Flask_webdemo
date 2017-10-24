@@ -59,9 +59,7 @@ def resend_confirmation():
     @note: 从新发送确认邮件
     '''
     token = current_user.generate_confirmation_token()
-    print current_user.email
-    print
-
+    
     send_email(current_user.email, 'Confirm Your Account',
                'auth/email/confirm', user=current_user, token=token)
     flash('通过电子邮件发送了一封新的确认电子邮件.','info')
@@ -83,16 +81,14 @@ def login():
 
             # 记录登陆日志
             users = LoginLog()
-            print user.username # 用户
+            #print user.username # 用户
             users.loginuser=user.username
             users.logintime=time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())) #时间
             users.login_browser=request.user_agent #代理
             users.login_ip=request.remote_addr # 登录地址
             db.session.add(users) # 提交
             db.session.commit()
-
             return redirect(url_for('main.index')) # 如果认证成功则重定向到已认证首页
-
         else:
             flash(u'邮箱或密码无效,请重新输入!','danger')    # 如果认证错误则flash一条消息过去
     return render_template('auth/login.html',form=form)
@@ -166,7 +162,7 @@ def password_reset_request():
     form = PasswordResetRequestForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
-        print user
+        #print user
         if user:
             token = user.generate_reset_token()
             send_email(user.email, u'重设密码',

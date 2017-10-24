@@ -31,8 +31,9 @@
                     <li class="nav-header">
                         <div class="dropdown profile-element">
                           <!-- <a href="{{ url_for('main.index') }}"><span> -->
-                          <img class="img-rounded profile-thumbnail" src="{{ current_user.gravatar(size=256) }}" width="90">
-                          
+                          <!-- <img class="img-rounded profile-thumbnail" src="{{ current_user.gravatar(size=256) }}" width="90"> -->
+                          <img class="img-rounded profile-thumbnail" src="{{ url_for('static',filename='main/img/avatar5.png') }}" width="90">
+
                         
                         <div class="logo-element">
                             Ops

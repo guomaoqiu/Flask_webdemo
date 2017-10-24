@@ -126,9 +126,6 @@ def test():
 
 ###############################################################################
 
-
-
-
 @main.route('/edit_profile', methods=['GET', 'POST'])
 @login_required
 def edit_profile():
