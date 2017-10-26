@@ -6,10 +6,10 @@ from . import main
 from flask_login import current_user, login_required
 from ..decorators import admin_required , permission_required
 import json,commands,datetime,sys,os
-from .forms import RegistrationForm, EditProfileForm, EditProfileAdminForm
+from .forms import RegistrationForm, EditProfileForm, EditProfileAdminForm, ApiForm
 from ..models import User,LoginLog
 from .. import db
-from ..models import Role, User
+from ..models import Role, User, ApiMg
 
 reload(sys)
 sys.setdefaultencoding("utf-8")
@@ -176,4 +176,56 @@ def edit_profile_admin(id):
     form.about_me.data = user.about_me
     return render_template('edit_profile.html', form=form, user=user)
 
+###############################################################################
+
+
+#################
+# 平台业务逻辑
+@main.route('/api_manager',methods=['GET', 'POST'])      
+@login_required
+def api_manager():
+    '''
+    @note: 对接第三方API管理函数
+    '''
+    form = ApiForm()
+    #i#f form.validate_on_submit():
+    if form.validate_on_submit():
+        apiinfo = ApiMg(app_name=form.app_name.data,
+                    api_user=form.api_user.data,
+                    api_paas=form.api_paas.data,
+                    api_url=form.api_url.data)
+
+        try:
+            db.session.add(apiinfo)
+            db.session.commit()
+            flash('添加Api信息成功','success')
+        except Exception,e:
+            db.session.rollback()
+            print e
+            flash('添加Api信息错误','danger')
+    res = ApiMg.query.all()
+    data = []
+    for x in res:
+        data.append(x.to_json())   
+
+    return render_template('api_manager.html',form=form,data=data)
+
+# delete api
+@main.route('/api_manager_del',methods=['GET', 'POST'])      
+@login_required
+def api_manager_del():
+    '''
+    @note: 在登陆状态下只允许管理者进入，否则来到403禁止登陆界面
+    '''
+    if request.method == 'POST':
+        check_id = json.loads(request.form.get('data'))['check_id']
+        api_id = ApiMg.query.filter_by(id=check_id).first()
+        try:
+            db.session.delete(api_id)
+            print check_id
+            return  jsonify({"result":True,"message":"删除成功"})
+        except Exception, e:
+            db.session.rollback()
+            print e
+            return  jsonify({"result":False,"message":"删除失败".format(e)})
 ###############################################################################

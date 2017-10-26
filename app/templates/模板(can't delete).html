@@ -1,8 +1,9 @@
-<%inherit file="base.html"/>
-<%block name="content">
-    <script src="${STATIC_URL}opsplatform/js/jquery-2.1.1.js"></script>
-    <script src="${STATIC_URL}opsplatform/js/jquery.dataTables.js"></script>
-    <script src="${STATIC_URL}opsplatform/js/dataTables.bootstrap.js"></script>
+{% extends 'base.html' %}
+{% block title %}Index{% endblock %}
+{% block content %}
+<script src="{{  url_for('static',filename='opsplatform/js/jquery-2.1.1.js') }}"></script>
+<script src="{{  url_for('static',filename='opsplatform/js/jquery.dataTables.js') }}"></script>
+<script src="{{  url_for('static',filename='opsplatform/js/dataTables.bootstrap.js') }}"></script>
             <div class="row wrapper border-bottom white-bg page-heading">
                 <div class="col-lg-8">
                     <h2>Dashboards</h2>
@@ -78,5 +79,5 @@
                 </div>
             </div>
         </div>
-</%block>
+{% endblock %}
 

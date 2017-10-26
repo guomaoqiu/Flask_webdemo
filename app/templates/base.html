@@ -31,8 +31,9 @@
                     <li class="nav-header">
                         <div class="dropdown profile-element">
                           <!-- <a href="{{ url_for('main.index') }}"><span> -->
-                          <!-- <img class="img-rounded profile-thumbnail" src="{{ current_user.gravatar(size=256) }}" width="90"> -->
-                          <img class="img-rounded profile-thumbnail" src="{{ url_for('static',filename='main/img/avatar5.png') }}" width="90">
+                          <img class="img-rounded profile-thumbnail" src="{{ current_user.gravatar(size=256) }}" width="50">
+
+                          <!-- <img class="img-rounded profile-thumbnail" src="{{ url_for('static',filename='main/img/avatar5.png') }}" width="90"> -->
 
                         
                         <div class="logo-element">
@@ -51,7 +52,9 @@
                         </ul>
                     </li>
                           <li>
-                        <a href=""><i class="fa fa-align-justify"></i> <span class="nav-label">游戏服操作</span><span class="fa arrow"></span></a>
+                        <a href="#"><i class="fa fa-globe"></i> <span class="nav-label">SaltStack</span><span class="label label-info pull-right">集中化管理</span></a>
+
+                        <a href=""><i class="fa fa-align-justify"></i> <span class="nav-label">游戏服操作</span><span class="label label-info pull-right">游戏服操作</span></a>
                         <ul class="nav nav-second-level collapse">
                             <li><a href="{{ url_for('main.index') }}">正式服维护</a></li>     <!-- 调用job平台作业 -->
                             <li><a href="">CBT服务器操作</a></li>  <!-- 调用job平台作业 -->
@@ -73,12 +76,7 @@
                            <li><a href="{{ url_for('main.index') }}">Zabbix Server添加</a></li>
                            <li><a href="{{ url_for('main.index') }}">Zabbix Server删除</a></li>
                        </ul>
-                   </li>
-          
-                    <li>
-                       <a href="${SITE_URL}api_connect"><i class="fa fa-bullseye"></i> <span class="nav-label">API管理</span></a>
-                   </li>
-
+                    </li>
                     <li>
                         <a href="{{ url_for('main.index') }}"><i class="fa fa-tasks"></i> <span class="nav-label">任务中心</span></a>
                     </li>
@@ -89,6 +87,12 @@
                       <li>
                         <a href="{{ url_for('main.loginlog') }}"><i class="fa fa-film"></i> <span class="nav-label">登录日志</span></a>
                     </li>
+                     <li>
+                        <a href="#"><i class="fa fa-bell-o"></i> <span class="nav-label">平台配置</span></span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse">
+                            <li><a href="{{ url_for('main.api_manager')}}"><i class="fa fa-bullseye"></i> <span class="nav-label">API管理</span></a></li> 
+                       </ul>
+                   </li>
                     {%endif%} 
                 </ul>
             </div>
@@ -100,19 +104,21 @@
             <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " title='收起'><i class="fa fa-bars" ></i> </a>
         </div>
             <ul class="nav navbar-top-links navbar-right">
-              {% if current_user.is_administrator() %}  
-                 <li><a href="{{ url_for('main.for_admin_only') }}"><i class="fa fa-email"></i>管理页面</a></li>
-              {%endif%} 
             <li><a><i class="fa fa-email"></i>Hello <code>{{ current_user.username }}</code></a></li>
              {% if current_user.is_authenticated %}
 
-             <li><a href="{{ url_for('main.user', username=current_user.username) }}">Profile</a></li>
+             
                       <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Account<b class="caret"></b></a>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"> 账户<b class="caret"></b></a>
                             <ul class="dropdown-menu">
-                                <li><a href="{{ url_for('auth.change_password') }}"><i class="fa fa-key"></i> Change Password</a></li>
-                                <li><a href="{{ url_for('auth.change_email_request') }}"><i class="fa fa-envelope"></i> Change Email</a></li>
-                                <li><a href="{{ url_for('auth.logout') }}"><i class="fa fa-sign-out"></i> Log Out</a></li>
+
+                                <li><a href="{{ url_for('main.user', username=current_user.username) }}"><i class="fa fa-user"></i>  个人资料</a></li>
+                                <li><a href="{{ url_for('auth.change_password') }}"><i class="fa fa-key"></i>  密码更改</a></li>
+                                <li><a href="{{ url_for('auth.change_email_request') }}"><i class="fa fa-envelope"></i>  邮箱更改</a></li>
+                                {% if current_user.is_administrator() %}  
+                                    <li><a href="{{ url_for('main.for_admin_only') }}"><i class="fa fa-wrench"></i>  管理页面</a></li>
+                                {%endif%} 
+                                <li><a href="{{ url_for('auth.logout') }}"><i class="fa fa-sign-out"></i>  注销登录</a></li>
                             </ul>
                     </li>
                 {% endif %}
@@ -128,6 +134,9 @@
 
 {% block content %}
 
+{% endblock %}
+{% block scripts %}
+{{ moment.include_moment() }}
 {% endblock %}
 
 </div>

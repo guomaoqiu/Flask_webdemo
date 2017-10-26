@@ -220,3 +220,27 @@ class LoginLog(db.Model):
                 'login_browser':self.login_browser,
                 'login_ip': self.login_ip,
                 }
+
+
+# api 管理
+class ApiMg(db.Model):
+    __tablename__ = 'api_manager'
+    id = db.Column(db.Integer, primary_key=True)
+    app_name =  db.Column(db.String(64), unique=True, index=True)
+    api_user = db.Column(db.String(64), unique=True, index=True)
+    api_paas = db.Column(db.String(64), unique=True, index=True)
+    api_token = db.Column(db.String(64), unique=True, index=True)
+    create_time = db.Column(db.DateTime(), default=datetime.now)
+    api_url = db.Column(db.String(64), unique=True, index=True)
+
+    def to_json(self):
+        return {
+            "id": self.id,
+            "app_name":self.app_name,
+            "api_user":self.api_user,
+            "api_token": self.api_token,
+            "create_time":self.create_time,
+            "api_paas": self.api_paas,
+            "api_url": self.api_url
+        }
+  

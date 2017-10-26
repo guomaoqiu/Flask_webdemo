@@ -76,3 +76,13 @@ class EditProfileAdminForm(FlaskForm):
         if field.data != self.user.username and \
                 User.query.filter_by(username=field.data).first():
             raise ValidationError('Username already in use.')
+
+
+
+
+class ApiForm(FlaskForm):
+    app_name = StringField('应用名称', validators=[Length(0, 64)])
+    api_user = StringField('Api用户', validators=[Length(0, 64)])
+    api_paas = StringField('API密码', validators=[Length(0, 64)])
+    api_url = StringField('API地址', validators=[Length(0, 64)])
+    submit = SubmitField('Submit')
