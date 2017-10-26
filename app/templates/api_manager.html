@@ -38,6 +38,7 @@
                                                         <th>场景 </th>
                                                         <th>API 用户</th>
                                                         <th>API 密码</th>
+                                                        <th>API 添加时间</th>
                                                         <th>API URL</th>
                                                         <th>API Status</th>
                                                         <th>操作</th>
@@ -56,8 +57,9 @@
                                                     <td>{{ each_data.app_name }}</td>
                                                     <td>{{ each_data.api_user }}</td>
                                                     <td>**************</td>
-                                                    <td>active</td>
+                                                    <td>{{ each_data.create_time }}</td>
                                                     <td>{{ each_data.api_url }}</td>
+                                                    <td>active</td>
                                                
                                                  
                                                     <td>
