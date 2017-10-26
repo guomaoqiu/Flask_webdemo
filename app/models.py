@@ -112,7 +112,7 @@ class User(UserMixin, db.Model):
         return True
 
     def generate_reset_token(self, expiration=3600):
-        # 重新设置时获取token
+        # 获取token
         s = Serializer(current_app.config['SECRET_KEY'], expiration)
         return s.dumps({'reset': self.id})
 

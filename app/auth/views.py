@@ -165,7 +165,7 @@ def password_reset_request():
         #print user
         if user:
             token = user.generate_reset_token()
-            send_email(user.email, u'重设密码',
+            send_email(user.email, u'密码重置',
                        'auth/email/reset_password',
                        user=user, token=token,
                        next=request.args.get('next'))
