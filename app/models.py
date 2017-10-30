@@ -231,6 +231,12 @@ class ApiMg(db.Model):
     create_time = db.Column(db.DateTime(), default=datetime.now)
     api_url = db.Column(db.String(64), unique=True, index=True)
 
+    def api_create_time(self):
+        return self.create_time
+
+    def api_token_res(self):
+        return self.api_token
+
     def to_json(self):
         return {
             "id": self.id,
@@ -241,4 +247,3 @@ class ApiMg(db.Model):
             "api_paas": self.api_paas,
             "api_url": self.api_url
         }
-  

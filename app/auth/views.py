@@ -59,7 +59,7 @@ def resend_confirmation():
     @note: 从新发送确认邮件
     '''
     token = current_user.generate_confirmation_token()
-    
+
     send_email(current_user.email, 'Confirm Your Account',
                'auth/email/confirm', user=current_user, token=token)
     flash('通过电子邮件发送了一封新的确认电子邮件.','info')
@@ -186,7 +186,7 @@ def password_reset(token):
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
         print user
-        if user is None:    
+        if user is None:
             return redirect(url_for('main.index'))
         if user.reset_password(token, form.password.data):
             flash('您的密码已更新.','success')

@@ -1,22 +1,24 @@
 # -*- coding:utf-8 -*-
 # jsonify 用于返回jsons数据
-from flask import render_template,redirect,request,Response,flash,jsonify,url_for
+from flask import render_template,redirect,request,Response,flash,jsonify,url_for,current_app
 from sqlalchemy import desc
 from . import main
 from flask_login import current_user, login_required
 from ..decorators import admin_required , permission_required
 import json,commands,datetime,sys,os
 from .forms import RegistrationForm, EditProfileForm, EditProfileAdminForm, ApiForm
-from ..models import User,LoginLog
+from ..models import User, LoginLog, Role, ApiMg
 from .. import db
-from ..models import Role, User, ApiMg
+from app.crypto import prpcrypt
+import time
 
+#from ..saltstack import saltapi
 reload(sys)
 sys.setdefaultencoding("utf-8")
 
 ###############################################################################
 
-@main.route('/admin')      
+@main.route('/admin')
 @login_required
 @admin_required
 def for_admin_only():
@@ -181,7 +183,7 @@ def edit_profile_admin(id):
 
 #################
 # 平台业务逻辑
-@main.route('/api_manager',methods=['GET', 'POST'])      
+@main.route('/api_manager',methods=['GET', 'POST'])
 @login_required
 def api_manager():
     '''
@@ -194,8 +196,10 @@ def api_manager():
                     api_user=form.api_user.data,
                     api_paas=form.api_paas.data,
                     api_url=form.api_url.data)
-
         try:
+            # 加密api密码
+            prpcrypt_key = prpcrypt(current_app.config.get('PRPCRYPTO_KEY'))
+            apiinfo.api_paas = prpcrypt_key.encrypt(form.api_paas.data)
             db.session.add(apiinfo)
             db.session.commit()
             flash('添加Api信息成功','success')
@@ -206,12 +210,12 @@ def api_manager():
     res = ApiMg.query.all()
     data = []
     for x in res:
-        data.append(x.to_json())   
+        data.append(x.to_json())
 
     return render_template('api_manager.html',form=form,data=data)
 
 # delete api
-@main.route('/api_manager_del',methods=['GET', 'POST'])      
+@main.route('/api_manager_del',methods=['GET', 'POST'])
 @login_required
 def api_manager_del():
     '''
