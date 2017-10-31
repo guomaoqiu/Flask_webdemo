@@ -5,11 +5,35 @@
 
 {% block content %}
 <script src="{{  url_for('static',filename='opsplatform/js/jquery-2.1.1.js') }}"></script>
-<div class="page-header">
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-8">
+        <h2>个人信息</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href="{{ url_for('main.index')}}">Home</a>
+            </li>
 
-    <h1>Edit Your Profile</h1>
+            <li class="active">
+                <strong>个人信息</strong>
+            </li>
+        </ol>
+    </div>
+
 </div>
-<div class="col-md-4">
-    {{ wtf.quick_form(form) }}
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="wrapper wrapper-content animated fadeInRight">
+                <img class="img-rounded profile-thumbnail" src="{{ user.gravatar(size=256) }}">
+                <div class="profile-header"><br>
+                  <div class="col-md-4">
+                      {{ wtf.quick_form(form) }}
+                  </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
 {% endblock %}
