@@ -30,12 +30,7 @@
                 <ul class="nav metismenu" id="side-menu">
                     <li class="nav-header">
                         <div class="dropdown profile-element">
-                          <!-- <a href="{{ url_for('main.index') }}"><span> -->
                           <img class="img-rounded profile-thumbnail" src="{{ current_user.gravatar(size=256) }}" width="50">
-
-                          <!-- <img class="img-rounded profile-thumbnail" src="{{ url_for('static',filename='main/img/avatar5.png') }}" width="90"> -->
-
-
                         <div class="logo-element">
                             Ops
                         </div>
@@ -118,7 +113,7 @@
                                 <li><a href="{{ url_for('auth.change_password') }}"><i class="fa fa-key"></i>  密码更改</a></li>
                                 <li><a href="{{ url_for('auth.change_email_request') }}"><i class="fa fa-envelope"></i>  邮箱更改</a></li>
                                 {% if current_user.is_administrator() %}
-                                    <li><a href="{{ url_for('main.usermanager') }}"><i class="fa fa-wrench"></i>  管理页面</a></li>
+                                    <li><a href="{{ url_for('main.usermanager') }}"><i class="fa fa-wrench"></i>  用户管理</a></li>
                                 {%endif%}
                                 <li><a href="{{ url_for('auth.logout') }}"><i class="fa fa-sign-out"></i>  注销登录</a></li>
                             </ul>
