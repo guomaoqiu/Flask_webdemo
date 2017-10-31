@@ -7,10 +7,11 @@ from flask_login import current_user, login_required
 from ..decorators import admin_required , permission_required
 import json,commands,datetime,sys,os
 from .forms import RegistrationForm, EditProfileForm, EditProfileAdminForm, ApiForm
-from ..models import User, LoginLog, Role, ApiMg
+from ..models import User, LoginLog, Role, ApiMg, Hostinfo
 from .. import db
 from app.crypto import prpcrypt
 import time
+from ..salt.saltapi import SaltApi
 
 #from ..saltstack import saltapi
 reload(sys)
@@ -57,31 +58,16 @@ def user(username):
 @login_required
 def usermanager():
     '''
-    @note: 用户注册
+    @note: 用户管理
     '''
-    role_id = 1
-    if request.form.get('role') == 'y':
-        #print '管理员'
-        role_id = 0
-
-    form = RegistrationForm()
-    if form.validate_on_submit():
-        user = User(email=form.email.data,
-                    username=form.username.data,
-                    password=form.password.data,
-                    role_id=role_id)
-        db.session.add(user)
-        db.session.commit()
-
-        flash(u'添加用户成功','success')
-
     # 列出用户
-    res = User.query.all()
+    user = User.query.all()
     data = []
-    for x in res:
-        data.append(x.to_json())
 
-    return render_template('user_manager.html',form=form,data=data)
+    for each_user in user:
+        data.append(each_user.to_json())
+    print data
+    return render_template('user_manager.html',data=data)
 
 ###############################################################################
 
@@ -91,7 +77,11 @@ def server_list():
     '''
     @note: 主机列表
     '''
-    return render_template('server_list.html')
+    host_list = Hostinfo.query.all()
+    data = []
+    [ data.append(i.to_json()) for i in host_list ]
+    print data
+    return render_template('server_list.html',data=data)
 
 ###############################################################################
 
@@ -233,3 +223,72 @@ def api_manager_del():
             print e
             return  jsonify({"result":False,"message":"删除失败".format(e)})
 ###############################################################################
+@main.route('/task_center',methods=['GET', 'POST'])
+@login_required
+def task_center():
+    '''
+    @note: 在登陆状态下只允许管理者进入，否则来到403禁止登陆界面
+    '''
+    return render_template('task_center.html')
+
+@main.route('/delete_server',methods=['GET', 'POST'])
+def delete_server():
+    '''
+    @note: 从数据库中删除已经存在的主机
+    '''
+    delete_host = []
+    hostname = json.loads(request.form.get('data'))['hostname']
+    [ delete_host.append(host.encode('raw_unicode_escape')) for host in hostname.split(',')]
+    try:
+        [ db.session.query(Hostinfo).filter(Hostinfo.hostname == host).delete() for host in delete_host ]
+        result = {'result': True, 'message': u"删除所选主机成功" }
+    except Exception, e:
+        result = {'result': False, 'message': u"删除所选主机失败,%s" % e}
+    return jsonify(result)
+
+@main.route('/get_server_info',methods=['GET', 'POST'])
+def get_server_info():
+    '''
+    @note: 通过saltapi获取所有minion主机的服务器信息，填入写入数据库中
+    '''
+    # 获取所有server的hostname
+    if request.method == "POST":
+        if not ApiMg.query.filter_by(app_name='saltstack').first():
+            result = {"result": False, "message": u'请确保api信息已录入！'}
+            return jsonify(result)
+        else:
+            try:
+                client = SaltApi('saltstack')
+                params = {'client': 'local', 'fun': 'test.ping', 'tgt': '*'}
+                json_data = client.get_allhostname(params)
+                data = dict(json.loads(json_data)['return'][0])
+
+                hostname_list = []
+
+                [hostname_list.append(i) for i in data.keys()]
+                print hostname_list
+                for host in hostname_list:
+                    if not Hostinfo.query.filter_by(hostname=host).first():
+
+                        all_host_info = dict(client.get_minions(host).items())
+                        print all_host_info
+                        host_record = Hostinfo(
+                            hostname=all_host_info['hostname'],
+                            private_ip=all_host_info['private_ip'],
+                            public_ip=all_host_info['public_ip'],
+                            mem_total=all_host_info['mem_total'],
+                            cpu_type=all_host_info['cpu_type'],
+                            num_cpus=all_host_info['num_cpus'],
+                            os_release=all_host_info['os_release'],
+                            kernelrelease=all_host_info['kernelrelease']
+                        )
+                        db.session.add(host_record)
+                        db.session.commit()
+
+                result = {"result": True, "message": u'刷新完毕！'}
+                return jsonify(result)
+
+            except Exception, e:
+                print e
+                result = {"result": False, "message": u'刷新出错！'}
+                return jsonify(result)

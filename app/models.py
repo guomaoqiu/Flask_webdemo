@@ -185,7 +185,12 @@ class User(UserMixin, db.Model):
                 'email': self.email,
                 'username': self.username,
                 'role_id':self.role_id,
+                'name':self.name,
+                'member_since':self.member_since,
+
                 }
+    
+
 
 class AnonymousUser(AnonymousUserMixin):
     def can(self, permissions):
@@ -246,4 +251,31 @@ class ApiMg(db.Model):
             "create_time":self.create_time,
             "api_paas": self.api_paas,
             "api_url": self.api_url
+        }
+
+
+# 主机信息
+class Hostinfo(db.Model):
+    __tablename__ = 'server_info_list'
+    id = db.Column(db.Integer, primary_key=True)
+    hostname = db.Column(db.String(64))
+    public_ip = db.Column(db.String(64))
+    private_ip = db.Column(db.String(64))
+    mem_total = db.Column(db.String(64))
+    cpu_type = db.Column(db.Text())
+    num_cpus = db.Column(db.String(64))
+    os_release = db.Column(db.String(64))
+    kernelrelease = db.Column(db.Text())
+
+    def to_json(self):
+        return {
+                'id':self.id,
+                'hostname' : self.hostname,
+                'public_ip' : self.public_ip,
+                'private_ip' : self.private_ip,
+                'mem_total' : self.mem_total,
+                'cpu_type'  : self.cpu_type,
+                'num_cpus' : self.num_cpus,
+                'os_release': self.os_release,
+                'kernelrelease': self.kernelrelease
         }

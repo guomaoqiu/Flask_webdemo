@@ -40,7 +40,7 @@ class SaltApi(object):
         print (current_time - old_token_create_time)
         parmes={'eauth': 'pam' ,'username':self.__user,'password':self.__password}
         #print parmes
-        if (current_time - old_token_create_time) > 43200 or old_api_token == '':
+        if (current_time - old_token_create_time) > 43200 or old_api_token is None:
 
             self.__salt_url += '/login'
             print self.__user,self.__password,self.__salt_url
@@ -104,21 +104,21 @@ class SaltApi(object):
             return json_data
         except Exception,e:
             print e
-    # def get_allhostname(self, params):
-    #     '''执行salt操作'''
-    #     headers = {
-    #         'Accept': 'application/json',
-    #         'X-Auth-Token':  self.__token_id
-    #     }
-    #     self.__salt_url = self.__salt_url.strip('/login')
-    #
-    #     try:
-    #         req = requests.post(self.__salt_url,data=params,headers=headers,verify=False,timeout=2)
-    #
-    #         return req.content
-    #     except Exception, e:
-    #         print e
-    #         return e
+    def get_allhostname(self, params):
+        '''执行salt操作'''
+        headers = {
+            'Accept': 'application/json',
+            'X-Auth-Token':  self.__token_id
+        }
+        self.__salt_url = self.__salt_url.strip('/login')
+
+        try:
+            req = requests.post(self.__salt_url,data=params,headers=headers,verify=False,timeout=10)
+
+            return req.content
+        except Exception, e:
+            print e
+            return e
     #
 
     #

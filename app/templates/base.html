@@ -80,7 +80,7 @@
                        </ul>
                     </li>
                     <li>
-                        <a href="{{ url_for('main.index') }}"><i class="fa fa-tasks"></i> <span class="nav-label">任务中心</span></a>
+                        <a href="{{ url_for('main.task_center') }}"><i class="fa fa-tasks"></i> <span class="nav-label">任务中心</span></a>
                     </li>
                        <li>
                         <a href="{{ url_for('main.index') }}"><i class="fa fa-film"></i> <span class="nav-label">任务历史</span></a>
@@ -106,7 +106,7 @@
             <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " title='收起'><i class="fa fa-bars" ></i> </a>
         </div>
             <ul class="nav navbar-top-links navbar-right">
-            <li><a><i class="fa fa-email"></i>Hello <code>{{ current_user.username }}</code></a></li>
+            <li><a><i class="fa fa-email"></i>Hello <code>{% if current_user.name %}{{ current_user.name }}{% else %}{{ current_user.username }}{% endif %}</code></a></li>
              {% if current_user.is_authenticated %}
 
 
@@ -118,7 +118,7 @@
                                 <li><a href="{{ url_for('auth.change_password') }}"><i class="fa fa-key"></i>  密码更改</a></li>
                                 <li><a href="{{ url_for('auth.change_email_request') }}"><i class="fa fa-envelope"></i>  邮箱更改</a></li>
                                 {% if current_user.is_administrator() %}
-                                    <li><a href="{{ url_for('main.for_admin_only') }}"><i class="fa fa-wrench"></i>  管理页面</a></li>
+                                    <li><a href="{{ url_for('main.usermanager') }}"><i class="fa fa-wrench"></i>  管理页面</a></li>
                                 {%endif%}
                                 <li><a href="{{ url_for('auth.logout') }}"><i class="fa fa-sign-out"></i>  注销登录</a></li>
                             </ul>

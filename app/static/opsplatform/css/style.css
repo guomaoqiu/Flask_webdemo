@@ -488,17 +488,21 @@ h5 {
   color: #a7b1c2;
   font-weight: 600;
   padding: 14px 20px 14px 25px;
+  font-family: initial;
 }
 .nav.navbar-right > li > a {
   color: #999c9e;
+  font-family: initial;
 }
 .nav > li.active > a {
   color: #ffffff;
+  font-family: initial;
 }
 .navbar-default .nav > li > a:hover,
 .navbar-default .nav > li > a:focus {
   background-color: #293846;
   color: white;
+  font-family: initial;
 }
 .nav .open > a,
 .nav .open > a:hover,
@@ -508,6 +512,7 @@ h5 {
 .nav.navbar-top-links > li > a:hover,
 .nav.navbar-top-links > li > a:focus {
   background-color: transparent;
+  font-family: initial;
 }
 .nav > li > a i {
   margin-right: 6px;
@@ -3852,6 +3857,7 @@ body.boxed-layout #wrapper {
 }
 a {
   cursor: pointer;
+  font-family: initial;
 }
 a:hover,
 a:focus {

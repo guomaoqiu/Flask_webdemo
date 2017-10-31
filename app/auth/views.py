@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-from flask import render_template, request, flash, redirect, url_for, current_app, abort
+from flask import render_template, request, flash, redirect, url_for, current_app, abort, jsonify
 from . import auth
 from .forms import LoginForm, RegistrationForm, ChangePasswordForm, PasswordResetRequestForm, PasswordResetForm, ChangeEmailForm
 from ..models import User, LoginLog
 from .. import db
 from flask_login import login_user, logout_user, login_required, current_user
-import time
+import time, json
 from ..email import send_email
 
 ###############################################################################
@@ -88,6 +88,11 @@ def login():
             users.login_ip=request.remote_addr # 登录地址
             db.session.add(users) # 提交
             db.session.commit()
+
+            send_email(current_app.config['FLASKY_ADMIN'], '登录通知','auth/email/login_notice',
+                       user=user,
+                       ip=request.remote_addr,
+                       agent=request.user_agent)
             return redirect(url_for('main.index')) # 如果认证成功则重定向到已认证首页
         else:
             flash(u'邮箱或密码无效,请重新输入!','danger')    # 如果认证错误则flash一条消息过去
@@ -232,3 +237,22 @@ def change_email(token):
     return redirect(url_for('main.index'))
 
 ###############################################################################
+
+@auth.route('/delete_user',methods=['GET', 'POST'])
+@login_required
+def delete_user():
+
+    '''
+    @note: 在登陆状态下只允许管理者进入，否则来到403禁止登陆界面
+    '''
+    if request.method == 'POST':
+        check_id = json.loads(request.form.get('data'))['check_id']
+        del_user = User.query.filter_by(id=check_id).first()
+        try:
+            db.session.delete(del_user)
+            print check_id
+            return  jsonify({"result":True,"message":"用户删除成功"})
+        except Exception, e:
+            db.session.rollback()
+            print e
+            return  jsonify({"result":False,"message":"用户删除失败".format(e)})

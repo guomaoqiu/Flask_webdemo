@@ -24,19 +24,19 @@
                 <div class="col-sm-12">
                     <div class="wrapper wrapper-content animated fadeInRight">
                         <img class="img-rounded profile-thumbnail" src="{{ user.gravatar(size=256) }}">
-                        <div class="profile-header">
-                            <h1>{{ user.username }}</h1>
+                        <div class="profile-header"><br>
+                            <!-- <p>Name: <a>{{ user.username }}</a></p> -->
+                            <!-- <h1>Name: {{ user.username }}</h1> -->
                             {% if user.name or user.location %}
                             <p>
-                                {% if user.name %}{{ user.name }}<br>{% endif %}
+                                Name  {% if user.name %}{{ user.name }}<br>{% endif %}
                                 {% if user.location %}
                                     From <a href="http://maps.google.com/?q={{ user.location }}", target="_blank">{{ user.location }}</a><br>
                                 {% endif %}
                             </p>
                             {% endif %}
-                            {% if current_user.is_administrator() %}
-                            <p><a href="mailto:{{ user.email }}">{{ user.email }}</a></p>
-                            {% endif %}
+
+                            <p>Mail: <a href="mailto:{{ user.email }}">{{ user.email }}</a></p>
                             {% if user.about_me %}<p>{{ user.about_me }}</p>{% endif %}
                             <p>Member since {{ moment(user.member_since).format('L') }}. Last seen {{ moment(user.last_seen).fromNow() }}.</p>
                             <p>
@@ -53,4 +53,4 @@
             </div>
         </div>
 
-{% endblock %}%
+{% endblock %}
