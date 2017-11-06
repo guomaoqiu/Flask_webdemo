@@ -89,6 +89,7 @@ def login():
             db.session.add(users) # 提交
             db.session.commit()
 
+            # 用户每次登录 通知管理员
             send_email(current_app.config['FLASKY_ADMIN'], '登录通知','auth/email/login_notice',
                        user=user,
                        ip=request.remote_addr,

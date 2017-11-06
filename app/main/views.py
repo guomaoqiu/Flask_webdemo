@@ -266,7 +266,7 @@ def get_server_info():
                 hostname_list = []
 
                 [hostname_list.append(i) for i in data.keys()]
-                print hostname_list
+                #print hostname_list
                 for host in hostname_list:
                     if not Hostinfo.query.filter_by(hostname=host).first():
 

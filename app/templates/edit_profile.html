@@ -25,7 +25,7 @@
     <div class="row">
         <div class="col-sm-12">
             <div class="wrapper wrapper-content animated fadeInRight">
-                <img class="img-rounded profile-thumbnail" src="{{ user.gravatar(size=256) }}">
+                <img class="img-rounded profile-thumbnail" src="{{ current_user.gravatar(size=256) }}">
                 <div class="profile-header"><br>
                   <div class="col-md-4">
                       {{ wtf.quick_form(form) }}
