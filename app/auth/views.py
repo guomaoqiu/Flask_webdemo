@@ -78,6 +78,7 @@ def login():
         if user is not None and user.verify_password(form.password.data): # 用户是否存在以及是否正确
 
             login_user(user,form.remember_me.data) # 记住我功能，bool值
+            flash('Hi, %s, Welcome to xxx Platform............' % user.username,'info')
 
             # 记录登陆日志
             users = LoginLog()
@@ -135,6 +136,7 @@ def logout():
     @note: 用户登出
     '''
     logout_user()
+    flash('logout success...', 'success')
     return redirect(url_for('auth.login'))
 
 ###############################################################################

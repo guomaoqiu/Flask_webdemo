@@ -170,8 +170,6 @@ def edit_profile_admin(id):
 
 ###############################################################################
 
-
-#################
 # 平台业务逻辑
 @main.route('/api_manager',methods=['GET', 'POST'])
 @login_required
