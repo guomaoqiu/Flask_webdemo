@@ -75,6 +75,7 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first() # 数据库查询
+
         if user is not None and user.verify_password(form.password.data): # 用户是否存在以及是否正确
 
             login_user(user,form.remember_me.data) # 记住我功能，bool值
@@ -90,11 +91,9 @@ def login():
             db.session.add(users) # 提交
             db.session.commit()
 
-            # 用户每次登录 通知管理员
-            send_email(current_app.config['FLASKY_ADMIN'], '登录通知','auth/email/login_notice',
-                       user=user,
-                       ip=request.remote_addr,
-                       agent=request.user_agent)
+            # 用户每次登录 通知管理员    
+            send_email(current_app.config['FLASKY_ADMIN'], '登录通知','auth/email/login_notice',user=user, ip=request.remote_addr, agent=request.user_agent)
+          
             return redirect(url_for('main.index')) # 如果认证成功则重定向到已认证首页
         else:
             flash(u'邮箱或密码无效,请重新输入!','danger')    # 如果认证错误则flash一条消息过去

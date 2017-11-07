@@ -7,6 +7,8 @@ blinker==1.3
 celery==4.0.2
 certifi==2016.9.26
 click==6.7
+crcmod==1.7
+crypto==1.4.1
 cycler==0.10.0
 dominate==2.2.1
 elasticsearch==5.0.1
@@ -37,8 +39,11 @@ Markdown==2.3.1
 MarkupSafe==0.23
 matplotlib==2.0.0
 mysqlclient==1.3.9
+Naked==0.1.31
 numpy==1.12.0
+oss2==2.3.4
 Pillow==2.5.1
+pycrypto==2.6.1
 pyparsing==2.2.0
 python-dateutil==2.6.0
 python-editor==1.0.3
@@ -47,6 +52,7 @@ PyYAML==3.12
 pyzabbix==0.7.4
 redis==2.10.5
 requests==2.12.1
+shellescape==3.4.1
 simplejson==3.6.0
 singledispatch==3.4.0.3
 six==1.4.1

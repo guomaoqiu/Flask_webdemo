@@ -3,7 +3,7 @@ body{
 	line-height: 10px;
 	color: #666;
 	border-top: 3px solid #eee;
-	background:#343434 url("../img/back.png") no-repeat fixed center; 
+	background:#343434 url("../img/black.png") no-repeat fixed center; 
 	background-size: cover;
 	padding-top: 37px;
 	-webkit-font-smoothing: antialiased;

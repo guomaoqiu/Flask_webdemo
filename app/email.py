@@ -17,6 +17,5 @@ def send_email(to, subject, template, **kwargs):
     msg.body = render_template(template + '.txt', **kwargs)
     msg.html = render_template(template + '.html', **kwargs)
     thr = Thread(target=send_async_email, args=[app, msg])
-    print msg.body
     thr.start()
     return thr
