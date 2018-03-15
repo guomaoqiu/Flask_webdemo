@@ -35,9 +35,6 @@
                             Ops
                         </div>
                     </li>
-                    <li>  <!-- 默认为主页 -->
-                       <a href="{{ url_for('salt.salttest') }}"><i class="fa fa-th-large"></i> <span class="nav-label">salttest</span></a>
-                   </li>
                      <li>  <!-- 默认为主页 -->
                         <a href="{{ url_for('main.index') }}"><i class="fa fa-th-large"></i> <span class="nav-label">首页</span></a>
                     </li>
@@ -132,6 +129,18 @@
 {% block content %}
 
 {% endblock %}
+<div class="footer">
+                <div class="pull-right">© 2018 - 2019 版权所有
+                    <a href="http://blog.sctux.com/" target="_blank">郭茂秋</a>
+                    <a href="tencent://message/?uin=2399447849$Site=&amp;Menu=yes">
+                                 <i class="fa fa-headphones"></i>  <span style="font-size: small">联系管理员
+                                     <a href="tencent://message/?uin=2399447849$Site=&amp;Menu=yes" title="">
+                                     <img border="0" src="http://wpa.qq.com/pa?p=2:471166308:51">
+                                 </a>
+                                 </span>
+                          </a>
+            </div>
+        </div>
 {% block scripts %}
 {{ moment.include_moment() }}
 {% endblock %}
