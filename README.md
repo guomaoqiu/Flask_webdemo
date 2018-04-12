@@ -1,3 +1,3 @@
 #基于Flask一套较好的webUI devopsdemo
-![image](screenshots/demo.png)<br>
+![](https://github.com/guomaoqiu/Flask_webdemo/blob/master/screenshots/demo.png)
 
