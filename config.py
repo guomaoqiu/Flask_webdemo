@@ -31,10 +31,10 @@ class Config:
 class DevelopmentConfig(Config):
     DEBUG = True
 
-    db_host = 'db'
+    db_host = '127.0.0.1'
     db_user = 'flask'
-    db_pass = 'local_ops'
-    db_name = 'local_ops'
+    db_pass = 'flask'
+    db_name = 'flask4'
     SQLALCHEMY_DATABASE_URI = 'mysql://' + db_user + ':' + db_pass + '@' + db_host + '/' + db_name
     SQLALCHEMY_ECHO=False #用于显式地禁用或启用查询记录
 
