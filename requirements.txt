@@ -2,7 +2,7 @@ alembic==0.8.10
 amqp==2.1.4
 backports-abc==0.4
 billiard==3.5.0.2
-bleach==1.4
+bleach==3.3.0
 blinker==1.3
 celery==4.0.2
 certifi==2016.9.26
