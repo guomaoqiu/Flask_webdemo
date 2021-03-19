@@ -31,7 +31,7 @@ hashlib==20081119
 hmac==20101005
 html5lib==1.0b3
 itsdangerous==0.24
-Jinja2==2.9.5
+Jinja2==2.11.3
 kombu==4.0.2
 livereload==2.4.1
 Mako==1.0.6
